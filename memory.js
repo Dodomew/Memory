@@ -118,6 +118,9 @@ document.addEventListener('click', function objectFinder(e)
        	{	//if the MouseEvent property target or srcElement === the tile object's newDiv, then...
        		if(target === tileContainer[i].newDiv)
        		{
+
+       			showHiddenNumber(i);
+       			/*
        			//store the found object in a var
        			var clickedObject = tileContainer[i];
 
@@ -133,10 +136,12 @@ document.addEventListener('click', function objectFinder(e)
 	       			clickedObject.newDiv.innerHTML = tileContainer[i].hiddenNumber.toString();
        				clickedObject.isFaceUp = true;
        			}
+				*/
 
        			//I check the tileContainer again with a different var
        			for(var j = 0; j < tileContainer.length; j++ )
-       			{	/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
+       			{
+       				/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
        				 When i and j = 0, the second if gets done (tileContainer i = j, because their index are both 0.)
        				 If they are not the same, so i = 0, j = 1 , then it looks at the .isFaceUp. Since i isFaceUp is true when it gets to the inner for loop, all it has to have is tileContainer[j] = true.
        				 If this is the case, it checks both hiddenNumbers and compares. If true, delete the divs and remove them from the array
@@ -144,15 +149,17 @@ document.addEventListener('click', function objectFinder(e)
        				 */
 					if(tileContainer[i] != tileContainer[j] && tileContainer[j].isFaceUp === true)
 					{
+
 						if(tileContainer[i].hiddenNumber === tileContainer[j].hiddenNumber)
 						{
+       						showHiddenNumber(j);
 							console.log("succes");
-							console.log(tileContainer[i]);
-							console.log(tileContainer[j]);
+							//console.log(tileContainer[i]);
+							//console.log(tileContainer[j]);
 							tileContainer[i].newDiv.remove(newDiv);
 							tileContainer[j].newDiv.remove(newDiv);
-							tileContainer.splice(i, 1);
-							tileContainer.splice(j, 1);
+							//tileContainer.splice(i, 1);
+							//tileContainer.splice(j, 1);
 						}
 						else
 						{
@@ -161,6 +168,7 @@ document.addEventListener('click', function objectFinder(e)
 							tileContainer[i].isFaceUp = false;
 							tileContainer[j].isFaceUp = false;
 						}
+
 					}
 					
        			}
@@ -169,7 +177,6 @@ document.addEventListener('click', function objectFinder(e)
        			//console.log(tileContainer[i]);
        			break; //stops the for loop. When an object is clicked again, the function is called again, therefor calling the for loop again
        		}
-
 
        	}
 }, 
@@ -191,3 +198,40 @@ false);
 	for(var x = 0; x = 2; )
 */
 
+/*
+
+When one object is already showing its hiddenNumber, and a second object is clicked, it must also show its hiddenNumber. BUT if they dont match each other, both tiles gotta go facedown again.
+If they do match each other, then they both got to disappear.
+
+	if(tileContainer[j].isFaceUp == true)
+	{
+		clickedObject.newDiv.innerHTML = " ";
+		clickedObject.isFaceUp = false;
+	}
+	else
+	{
+		//append the hiddenNumber string to the found object's newDiv, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
+		clickedObject.newDiv.innerHTML = tileContainer[j].hiddenNumber.toString();
+		clickedObject.isFaceUp = true;
+	}
+	
+	but this is copy paste of the first object, is there anything to make this less?
+*/
+
+function showHiddenNumber(pop)
+{
+	var clickedObject = tileContainer[pop];
+
+	//set bool to false again, and remove its html content. Which is the hiddenNumber.
+	if(tileContainer[pop].isFaceUp == true)
+	{
+		clickedObject.newDiv.innerHTML = " ";
+		clickedObject.isFaceUp = false;
+	}
+	else
+	{
+		//append the hiddenNumber string to the found object's newDiv, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
+		clickedObject.newDiv.innerHTML = tileContainer[pop].hiddenNumber.toString();
+		clickedObject.isFaceUp = true;
+	}
+}
