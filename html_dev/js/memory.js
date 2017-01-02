@@ -42,7 +42,7 @@ var bottomValue = [0, 0, 1, 1, 2, 2, 3, 3];
 var tileCount = 0;
 //array to hold the Tile objects
 var tileContainer = []; 
-var faceUpCounter = 0
+
 
 
 //I create an object named "tile", which should be used in a loop that spawns the tiles. Constructor
@@ -59,7 +59,6 @@ do
 	var index = Math.floor(Math.random() * bottomValue.length);
 	//I create a var which holds the value of the chosen index of array
 	var bottomRandomValue = bottomValue[index];
-	console.log(bottomRandomValue + " " + index);
 	//I remove the index of array and only remove 1
 	bottomValue.splice(index, 1);
 
@@ -73,7 +72,6 @@ do
 	//append the instantiated object's property newDiv to the body element, which reads: div class = "tile"
 	document.body.appendChild(NewTile.newDiv);
 	tileContainer.push(NewTile);
-	console.log(tileContainer);
 }
 while(bottomValue.length > 0);
 
@@ -111,93 +109,49 @@ while(bottomValue.length > 0);
 document.addEventListener('click', function objectFinder(e) 
 {
     e = window.event;
-    var target = e.target || e.srcElement; //the target can be either the e.target or e.srcElements, both properties work
-        console.log(e);
-        
+    var target = e.target || e.srcElement; //the target can be either the e.target or e.srcElements, both properties work        
+	      
+        if (checkNumberOfTilesClicked() <= 1)
+        {
 
-        //Iterate through the tileContainer array, increment by 1 each time
-       	for(var i = 0; i < tileContainer.length; i++)
-       	{	//if the MouseEvent property target or srcElement === the tile object's newDiv, then...
-       		if(target === tileContainer[i].newDiv)
-       		{
-       			showHiddenNumber(i);
-       			/*
-       			//store the found object in a var
-       			var clickedObject = tileContainer[i];
+	        //Iterate through the tileContainer array, increment by 1 each time
+	       	for(var i = 0; i < tileContainer.length; i++)
+	       	{	//if the MouseEvent property target or srcElement === the tile object's newDiv, then...
+	       		if(target === tileContainer[i].newDiv)
+	       		{
+	       			showHiddenNumber(i);
+	       		
 
-       			//set bool to false again, and remove its html content. Which is the hiddenNumber.
-       			if(tileContainer[i].isFaceUp == true)
-       			{
-	       			clickedObject.newDiv.innerHTML = " ";
-       				clickedObject.isFaceUp = false;
-       			}
-       			else
-       			{
-	       			//append the hiddenNumber string to the found object's newDiv, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
-	       			clickedObject.newDiv.innerHTML = tileContainer[i].hiddenNumber.toString();
-       				clickedObject.isFaceUp = true;
-       			}
-				*/
-
-       			//I check the tileContainer again with a different var
-       			for(var j = 0; j < tileContainer.length; j++ )
-       			{
-       				/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
-       				 When i and j = 0, the second if gets done (tileContainer i = j, because their index are both 0.)
-       				 If they are not the same, so i = 0, j = 1 , then it looks at the .isFaceUp. Since i isFaceUp is true when it gets to the inner for loop, all it has to have is tileContainer[j] = true.
-       				 If this is the case, it checks both hiddenNumbers and compares. If true, delete the divs and remove them from the array
-       				 Else set their innerHTML to empty and their bool to false
-       				 */
-       				 checkNumberOfTilesClicked();
-					if(tileContainer[i] != tileContainer[j] && tileContainer[j].isFaceUp === true)
-					{
-						console.log("de 2e tile is geklikt");
-						console.log(tileContainer[i].isFaceUp);
-						console.log(tileContainer[j].isFaceUp);
-
-						tileContainer[j].newDiv.innerHTML = tileContainer[j].hiddenNumber.toString();
-						//showHiddenNumber(j);
-						if(tileContainer[i].isFaceUp === true && tileContainer[j].isFaceUp === true)
+	       			//I check the tileContainer again with a different var
+	       			for(var j = 0; j < tileContainer.length; j++ )
+	       			{
+	       				/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
+	       				 When i and j = 0, the second if gets done (tileContainer i = j, because their index are both 0.)
+	       				 If they are not the same, so i = 0, j = 1 , then it looks at the .isFaceUp. Since i isFaceUp is true when it gets to the inner for loop, all it has to have is tileContainer[j] = true.
+	       				 If this is the case, it checks both hiddenNumbers and compares. If true, delete the divs and remove them from the array
+	       				 Else set their innerHTML to empty and their bool to false
+	       				 */
+						if(tileContainer[i] != tileContainer[j] && tileContainer[j].isFaceUp === true)
 						{
 
-							console.log("2 zijn nu face up");
-							//setTimeout(timeoutCode(i, j), 0);
-							timeoutCode(i,j);
+							tileContainer[j].newDiv.innerHTML = tileContainer[j].hiddenNumber.toString();
 
-							/*
-							if(tileContainer[i].hiddenNumber === tileContainer[j].hiddenNumber)
+							if(tileContainer[i].isFaceUp === true && tileContainer[j].isFaceUp === true)
 							{
-								console.log("succes");
-								//console.log(tileContainer[i]);
-								//console.log(tileContainer[j]);
-								tileContainer[i].newDiv.remove(newDiv);
-								tileContainer[j].newDiv.remove(newDiv);
-								//tileContainer.splice(i, 1);
-								//tileContainer.splice(j, 1);
+
+								timeoutCode(tileContainer[i], tileContainer[j]);
+
 							}
-							else
-							{
-								
-								console.log("niet succesvol");
-								tileContainer[i].newDiv.innerHTML = " ";
-								tileContainer[j].newDiv.innerHTML = " ";
-								tileContainer[i].isFaceUp = false;
-								tileContainer[j].isFaceUp = false;
-								
-							}
-							*/
+
 						}
+						
+	       			}
 
-					}
-					
-       			}
+	       			break; //stops the for loop. When an object is clicked again, the function is called again, therefor calling the for loop again
+	       		}
 
-
-       			//console.log(tileContainer[i]);
-       			break; //stops the for loop. When an object is clicked again, the function is called again, therefor calling the for loop again
-       		}
-
-       	}
+	       	}
+       }
 }, 
 false);
 
@@ -245,7 +199,6 @@ function showHiddenNumber(el)
 	if(tileContainer[el].isFaceUp == true)
 	{
 		clickedObject.newDiv.innerHTML = " ";
-		//clickedObject.isFaceUp = false;
 	}
 	else
 	{
@@ -260,64 +213,51 @@ function timeoutCode(i, j)
 	setTimeout(function ()
 	{
 
-		if(tileContainer[i].hiddenNumber === tileContainer[j].hiddenNumber)
+		if(i.hiddenNumber === j.hiddenNumber)
 		{
-
 			removeTile(i, j);
-
 		}
 		else
 		{			
-			turnTileDown(i, j);
-			
+			turnTileDown(i, j);			
 		}
-	}, 2000);
+	}, 1000);
 }
 
 function checkNumberOfTilesClicked()
 {
-	
-	for(var z = 0; z < tileContainer.length; z++)
+	/*
+	deze functie moet checken hoeveel tiles.isFaceUp = true zijn en returned dit.
+	*/
+	var faceUpCounter = 0;
+	tileContainer.forEach(function(tile)
 	{
-		
-		if(tileContainer[z].isFaceUp == true)
+		if(tile.isFaceUp == true)
 		{
-			console.log("faceUpCounter = " + faceUpCounter.toString());
 			faceUpCounter++;
-
-			if(faceUpCounter > 2)
-			{
-				tileContainer.forEach(function(z)
-				{
-					console.log("faceUpCounter reset");
-					z.isFaceUp == false;
-					faceUpCounter = 0;
-				}
-			);
-			}
 		}
-	}
+		
+	});
 
+	return faceUpCounter;
+	
 }
 
 
 
 function removeTile(i, j)
 {
-	console.log("succes");
-	//console.log(tileContainer[i]);
-	//console.log(tileContainer[j]);
-	tileContainer[i].newDiv.remove(newDiv);
-	tileContainer[j].newDiv.remove(newDiv);
-	//tileContainer.splice(i, 1);
-	//tileContainer.splice(j, 1);
+	i.newDiv.remove(newDiv);
+	j.newDiv.remove(newDiv);
+
+	tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
+	tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
 }
 
 function turnTileDown(i, j)
 {
-	console.log("niet succesvol");
-	tileContainer[i].newDiv.innerHTML = " ";
-	tileContainer[j].newDiv.innerHTML = " ";
-	tileContainer[i].isFaceUp = false;
-	tileContainer[j].isFaceUp = false;
+	i.newDiv.innerHTML = " ";
+	j.newDiv.innerHTML = " ";
+	i.isFaceUp = false;
+	j.isFaceUp = false;
 }
