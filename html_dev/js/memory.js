@@ -46,12 +46,16 @@ var tileContainer = [];
 
 
 //I create an object named "tile", which should be used in a loop that spawns the tiles. Constructor
-function Tile(hiddenNumber, isFaceUp, newDiv)
+function Tile(hiddenNumber, isFaceUp, back, front, tileContainer)
 {
 	this.hiddenNumber = hiddenNumber;
 	this.isFaceUp = isFaceUp;
-	this.newDiv = newDiv;
+	this.back = back;
+	this.front = front;
+	this.tileContainer = tileContainer;
 }
+
+var contentContainer = document.getElementById("content-container");
 
 do
 {
@@ -63,39 +67,39 @@ do
 	bottomValue.splice(index, 1);
 
 	tileCount++;
-
-	//create a var that holds the code to create a HTML div
-	var newDiv = document.createElement("div");
-
-	//instantiate Tile (line 44) and give the following parameters
-	var NewTile = new Tile(bottomRandomValue, false, newDiv);
 	
 	var divTileContainer = document.createElement("div");
 	divTileContainer.setAttribute("class", "tile-container");
-
-	var contentContainer = document.getElementById("content-container");
+	
 	contentContainer.appendChild(divTileContainer);
 
 	var innerTileContainerFront = document.createElement("div");
 	innerTileContainerFront.class = "front";
 	innerTileContainerFront.setAttribute("class", "front");
-	divTileContainer.appendChild(innerTileContainerFront);
+
+/*
+	
+	var back = document.createElement("div");
+	back.class = "back";
+	back.setAttribute("class", "back");
+	divTileContainer.appendChild(back);
+*/
+	//create a var that holds the hiddenNumber
+	//var back = document.createElement("div");
 
 	var innerTileContainerBack = document.createElement("div");
 	innerTileContainerBack.class = "back";
 	innerTileContainerBack.setAttribute("class", "back");
+
+	divTileContainer.appendChild(innerTileContainerFront);
 	divTileContainer.appendChild(innerTileContainerBack);
 
-	//access the newDiv property of Tile object and give it a html class named tile
-	var divClassName = NewTile.newDiv.setAttribute("class", "tile" + tileCount.toString());
-	//ik moet hiddenNumber appenden aan tile1, 2 etc
-	//tile1.appendChild(hiddenNumber)
-	//divClassName.appendChild()
-	
+	//instantiate Tile (line 44) and give the following parameters
+	var NewTile = new Tile(bottomRandomValue, false, innerTileContainerBack, innerTileContainerFront, divTileContainer);
 
-	innerTileContainerBack.appendChild(NewTile.newDiv);
-	//append the instantiated object's property newDiv to the body element, which reads: div class = "tile"
-	//document.body.appendChild(NewTile.newDiv);
+
+	//append the instantiated object's property back to the body element, which reads: div class = "tile"
+	//document.body.appendChild(NewTile.back;
 	tileContainer.push(NewTile);
 }
 while(bottomValue.length > 0);
@@ -104,23 +108,23 @@ while(bottomValue.length > 0);
 
 //document.getElementByClassName("tile");
 /*
-	if element is clicked, return the classname to me (newDiv), which is a property of that object
-	that newDiv has a bottomRandomValue which I want to show
-	to know which class the element has, i have to look at the Tile object, since it stores the newDiv
+	if element is clicked, return the classname to me (back), which is a property of that object
+	that back has a bottomRandomValue which I want to show
+	to know which class the element has, i have to look at the Tile object, since it stores the back
 	but the Tile objects arent stored anywhere, so i gotta create an Array that holds the Tiles
 	then, when clicked I can check the returned value with the objects in the array to see which object was clicked
 
 	something like: tileContainer[clickedObject].hiddenNumber
 	I want to show this number in this tile square, so perhaps something like innerHTML = hiddenNumber.toString(); , but only to the tileNumber class, not tile class (tile1, tile2 etc)
-	e.srcElement = newDiv (in the web console it shows for example: div.tile1.tile, which is also the first object's newDiv (in this case))
-	so when a tile is clicked, I know the value of its newDiv. 
-	I can then iterate through the array that holds the object and check each object's newDiv. If any of those object's newDiv matches the clicked newDiv, I know which Object was clicked. For loop
+	e.srcElement = back (in the web console it shows for example: div.tile1.tile, which is also the first object's back (in this case))
+	so when a tile is clicked, I know the value of its back. 
+	I can then iterate through the array that holds the object and check each object's back. If any of those object's back matches the clicked back, I know which Object was clicked. For loop
 
 	When I know which object is clicked, I want to show bottomRandomValue as a string inside the tile1 div
 
 	for(var i; i < array.length; i++)
 	{
-		if(e.srcElement === tileContainer[i].newDiv)
+		if(e.srcElement === tileContainer[i].back)
 		{
 			this is my ClickedObject
 		}
@@ -136,53 +140,53 @@ document.addEventListener('click', function objectFinder(e)
     e = window.event;
     var target = e.target || e.srcElement; //the target can be either the e.target or e.srcElements, both properties work        
 	      
-        if (checkNumberOfTilesClicked() <= 1)
-        {
+    if (checkNumberOfTilesClicked() <= 1)
+    {
 
-	        //Iterate through the tileContainer array, increment by 1 each time
-	       	for(var i = 0; i < tileContainer.length; i++)
-	       	{	//if the MouseEvent property target or srcElement === the tile object's newDiv, then...
-	       		if(target === tileContainer[i].newDiv)
-	       		{
-	       			showHiddenNumber(i);
-	       		
+        //Iterate through the tileContainer array, increment by 1 each time
+       	for(var i = 0; i < tileContainer.length; i++)
+       	{	//if the MouseEvent property target or srcElement === the tile object's back, then...
+       		if(target === tileContainer[i].front)
+       		{
 
-	       			//I check the tileContainer again with a different var
-	       			for(var j = 0; j < tileContainer.length; j++ )
-	       			{
-	       				/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
-	       				 When i and j = 0, the second if gets done (tileContainer i = j, because their index are both 0.)
-	       				 If they are not the same, so i = 0, j = 1 , then it looks at the .isFaceUp. Since i isFaceUp is true when it gets to the inner for loop, all it has to have is tileContainer[j] = true.
-	       				 If this is the case, it checks both hiddenNumbers and compares. If true, delete the divs and remove them from the array
-	       				 Else set their innerHTML to empty and their bool to false
-	       				 */
-						if(tileContainer[i] != tileContainer[j] && tileContainer[j].isFaceUp === true)
+       			showHiddenNumber(i);	       		
+
+       			//I check the tileContainer again with a different var
+       			for(var j = 0; j < tileContainer.length; j++ )
+       			{
+       				/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
+       				 When i and j = 0, the second if gets done (tileContainer i = j, because their index are both 0.)
+       				 If they are not the same, so i = 0, j = 1 , then it looks at the .isFaceUp. Since i isFaceUp is true when it gets to the inner for loop, all it has to have is tileContainer[j] = true.
+       				 If this is the case, it checks both hiddenNumbers and compares. If true, delete the divs and remove them from the array
+       				 Else set their innerHTML to empty and their bool to false
+       				 */
+					if(tileContainer[i] != tileContainer[j] && tileContainer[j].isFaceUp === true)
+					{
+
+						tileContainer[j].back.innerHTML = tileContainer[j].hiddenNumber.toString();
+
+						if(tileContainer[i].isFaceUp === true && tileContainer[j].isFaceUp === true)
 						{
 
-							tileContainer[j].newDiv.innerHTML = tileContainer[j].hiddenNumber.toString();
-
-							if(tileContainer[i].isFaceUp === true && tileContainer[j].isFaceUp === true)
-							{
-
-								timeoutCode(tileContainer[i], tileContainer[j]);
-
-							}
+							timeoutCode(tileContainer[i], tileContainer[j]);
 
 						}
-						
-	       			}
 
-	       			break; //stops the for loop. When an object is clicked again, the function is called again, therefor calling the for loop again
-	       		}
+					}
+					
+       			}
 
-	       	}
-       }
+       			break; //stops the for loop. When an object is clicked again, the function is called again, therefor calling the for loop again
+       		}
+
+       	}
+	}
 }, 
 false);
 
 /*
 	I have to create an if(?) that says: if object is clicked, and this object is already showing its hiddenNumber, hide hiddenNumber
-	I append something, so I should be able to remove it too, something like: clickedObject.newDiv.remove(divContent)
+	I append something, so I should be able to remove it too, something like: clickedObject.back.remove(divContent)
 
 	Now I have to make it so that IF there are two tiles showing their hiddenNumber, and their hiddenNumbers are NOT EQUAL, then hide both tiles again.
 	If they are the same hiddenNumber, then remove them from the game.
@@ -203,13 +207,13 @@ If they do match each other, then they both got to disappear.
 
 	if(tileContainer[j].isFaceUp == true)
 	{
-		clickedObject.newDiv.innerHTML = " ";
+		clickedObject.back.innerHTML = " ";
 		clickedObject.isFaceUp = false;
 	}
 	else
 	{
-		//append the hiddenNumber string to the found object's newDiv, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
-		clickedObject.newDiv.innerHTML = tileContainer[j].hiddenNumber.toString();
+		//append the hiddenNumber string to the found object's back, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
+		clickedObject.back.innerHTML = tileContainer[j].hiddenNumber.toString();
 		clickedObject.isFaceUp = true;
 	}
 	
@@ -224,13 +228,17 @@ function showHiddenNumber(el)
 	//set bool to false again, and remove its html content. Which is the hiddenNumber.
 	if(tileContainer[el].isFaceUp == true)
 	{
-		clickedObject.newDiv.innerHTML = " ";
+		clickedObject.back.innerHTML = " ";
 	}
 	else
 	{
-		//append the hiddenNumber string to the found object's newDiv, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
-		clickedObject.newDiv.innerHTML = tileContainer[el].hiddenNumber.toString();
+		//append the hiddenNumber string to the found object's back, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
+		clickedObject.back.innerHTML = tileContainer[el].hiddenNumber.toString();
 		clickedObject.isFaceUp = true;
+
+		clickedObject.tileContainer.classList.add("flipped");
+		clickedObject.tileContainer.classList.add("flipped");
+
 	}
 }
 
@@ -273,8 +281,8 @@ function checkNumberOfTilesClicked()
 
 function removeTile(i, j)
 {
-	i.newDiv.remove(newDiv);
-	j.newDiv.remove(newDiv);
+	i.back.remove(innerTileContainerBack);
+	j.back.remove(innerTileContainerBack);
 
 	tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
 	tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
@@ -282,13 +290,19 @@ function removeTile(i, j)
 
 function turnTileDown(i, j)
 {
-	i.newDiv.innerHTML = " ";
-	j.newDiv.innerHTML = " ";
+	i.tileContainer.classList.remove("flipped");
+	i.tileContainer.classList.remove("flipped");
+
+	j.tileContainer.classList.remove("flipped");
+	j.tileContainer.classList.remove("flipped");
+
+	i.back.innerHTML = " ";
+	j.back.innerHTML = " ";
 	i.isFaceUp = false;
 	j.isFaceUp = false;
 }
 
-function flipCard() 
+/*function flipCard() 
 {
 	var cards = document.querySelectorAll(".tile-container");
 	for ( var i  = 0, len = cards.length; i < len; i++ ) 
@@ -307,4 +321,4 @@ function flipCard()
 	}
 }
 
-flipCard();
+flipCard();*/
