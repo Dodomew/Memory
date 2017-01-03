@@ -1,0 +1,99 @@
+$green: #85A239;
+$lightgreen: #B5D06E;
+$darkgreen: #5F7A19;
+$purple: #832F68;
+$lightpurple: #A8598E;
+$darkpurple: #631449;
+$purpleshadow: #3F032B; //24.7, 1.2, 16.9
+
+@import url('https://fonts.googleapis.com/css?family=Droid+Sans');
+
+
+@mixin box-shadows($blur)
+{
+	-webkit-box-shadow: 0px 0px $blur -4px rgba(24.7, 1.2, 16.9,1);
+	-moz-box-shadow: 0px 0px $blur -4px rgba(24.7, 1.2, 16.9,1);
+	box-shadow: 0px 0px $blur -4px rgba(24.7, 1.2, 16.9,1);
+}
+
+@mixin tile($width, $height, $margin)
+{
+	width: $width;
+	height: $height;
+	margin: $margin;
+	display: inline-block;
+}
+
+html, body
+{
+	background-color: $purple;
+	width: 100vw;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	font-family: 'Droid Sans', sans-serif;
+}
+
+#content-container
+{
+	width: 70%;
+	height: auto;
+	margin: auto;
+	padding: 1vw;
+}
+
+/* entire container, keeps perspective */
+.tile-container 
+{
+	perspective: 1000px;
+	@include box-shadows(20px);
+	@include tile(75px, 75px, 1vw);
+	position: relative;
+}
+
+.tile-container.flipped .front
+{
+	transform: rotateY(180deg);
+}
+
+.tile-container.flipped .back
+{
+	transform: rotateY(0deg);
+}
+
+/* hide back of pane during swap */
+.front, .back 
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	-webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  	-webkit-transition: -webkit-transform 0.3s;
+    transition: transform 0.3s;
+    text-align: center;
+	line-height: 75px;
+	vertical-align: top;
+	transition: all 0.2s ease;
+	font-size: 2em;
+}
+
+.front 
+{
+	background-color: $green;
+
+}
+
+.front:hover
+{
+	background-color: $lightgreen;
+}
+
+.back 
+{
+	-webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+	background-color: red;
+}

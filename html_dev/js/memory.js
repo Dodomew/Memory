@@ -38,7 +38,7 @@ the do while loop stops when array.length =! 0 . If you do > 0 , it stops immedi
 */
  
 //I create an array to hold the bottom values
-var bottomValue = [0, 0, 1, 1, 2, 2, 3, 3]; 
+var bottomValue = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10]; 
 var tileCount = 0;
 //array to hold the Tile objects
 var tileContainer = []; 
@@ -63,14 +63,39 @@ do
 	bottomValue.splice(index, 1);
 
 	tileCount++;
+
 	//create a var that holds the code to create a HTML div
 	var newDiv = document.createElement("div");
+
 	//instantiate Tile (line 44) and give the following parameters
 	var NewTile = new Tile(bottomRandomValue, false, newDiv);
+	
+	var divTileContainer = document.createElement("div");
+	divTileContainer.setAttribute("class", "tile-container");
+
+	var contentContainer = document.getElementById("content-container");
+	contentContainer.appendChild(divTileContainer);
+
+	var innerTileContainerFront = document.createElement("div");
+	innerTileContainerFront.class = "front";
+	innerTileContainerFront.setAttribute("class", "front");
+	divTileContainer.appendChild(innerTileContainerFront);
+
+	var innerTileContainerBack = document.createElement("div");
+	innerTileContainerBack.class = "back";
+	innerTileContainerBack.setAttribute("class", "back");
+	divTileContainer.appendChild(innerTileContainerBack);
+
 	//access the newDiv property of Tile object and give it a html class named tile
-	var divClassName = NewTile.newDiv.setAttribute("class", "tile" + tileCount.toString() + " tile");
+	var divClassName = NewTile.newDiv.setAttribute("class", "tile" + tileCount.toString());
+	//ik moet hiddenNumber appenden aan tile1, 2 etc
+	//tile1.appendChild(hiddenNumber)
+	//divClassName.appendChild()
+	
+
+	innerTileContainerBack.appendChild(NewTile.newDiv);
 	//append the instantiated object's property newDiv to the body element, which reads: div class = "tile"
-	document.body.appendChild(NewTile.newDiv);
+	//document.body.appendChild(NewTile.newDiv);
 	tileContainer.push(NewTile);
 }
 while(bottomValue.length > 0);
@@ -195,6 +220,7 @@ function showHiddenNumber(el)
 {
 	var clickedObject = tileContainer[el];
 
+
 	//set bool to false again, and remove its html content. Which is the hiddenNumber.
 	if(tileContainer[el].isFaceUp == true)
 	{
@@ -261,3 +287,24 @@ function turnTileDown(i, j)
 	i.isFaceUp = false;
 	j.isFaceUp = false;
 }
+
+function flipCard() 
+{
+	var cards = document.querySelectorAll(".tile-container");
+	for ( var i  = 0, len = cards.length; i < len; i++ ) 
+	{
+		var card = cards[i];
+		clickListener( card );
+	}
+
+	function clickListener(card) 
+	{
+		card.addEventListener( "click", function() 
+		{
+		  var c = this.classList;
+		  c.contains("flipped") === true ? c.remove("flipped") : c.add("flipped");
+		});
+	}
+}
+
+flipCard();

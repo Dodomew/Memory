@@ -1,8 +1,71 @@
-.tile
-{
-	width: 50px;
-	height: 50px;
-	background-color: red;
-	display: inline-block;
-	margin: 1vw;	
+@import url("https://fonts.googleapis.com/css?family=Droid+Sans");
+html, body {
+  background-color: #832F68;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: 'Droid Sans', sans-serif;
 }
+
+#content-container {
+  width: 70%;
+  height: auto;
+  margin: auto;
+  padding: 1vw;
+}
+
+/* entire container, keeps perspective */
+.tile-container {
+  perspective: 1000px;
+  -webkit-box-shadow: 0px 0px 20px -4px #190111;
+  -moz-box-shadow: 0px 0px 20px -4px #190111;
+  box-shadow: 0px 0px 20px -4px #190111;
+  width: 75px;
+  height: 75px;
+  margin: 1vw;
+  display: inline-block;
+  position: relative;
+}
+
+.tile-container.flipped .front {
+  transform: rotateY(180deg);
+}
+
+.tile-container.flipped .back {
+  transform: rotateY(0deg);
+}
+
+/* hide back of pane during swap */
+.front, .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  text-align: center;
+  line-height: 75px;
+  vertical-align: top;
+  transition: all 0.2s ease;
+  font-size: 2em;
+}
+
+.front {
+  background-color: #85A239;
+}
+
+.front:hover {
+  background-color: #B5D06E;
+}
+
+.back {
+  -webkit-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+  background-color: red;
+}
+
+/*# sourceMappingURL=style.css.map */
