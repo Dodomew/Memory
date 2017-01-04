@@ -44,8 +44,13 @@ var tileCount = 0;
 //array to hold the Tile objects
 var tileContainer = []; 
 
+var contentContainer = document.getElementById("content-container");
+
 function userInput()
 {
+	bottomValue.length = 0;
+	document.getElementById("content-container").innerHTML = "";
+
 	var userNumber = parseInt(document.getElementById("userInputField").value);
 	/*
 	var userNumber = document.getElementById("userInputField");
@@ -62,7 +67,54 @@ function userInput()
 		bottomValue.push(i);
 		bottomValue.push(i);
 		console.log(bottomValue);
+
+		//if(user input weer getal){ bottomValue.length = 0;}
 	}
+
+	do
+	{
+		//I create a var to hold the index number of the array, which is chosen at random between 0 and array.length. Math.floor makes sure the number is never higher than the array.lenght by rounding down (1.9 ==> 1)
+		var index = Math.floor(Math.random() * bottomValue.length);
+		//I create a var which holds the value of the chosen index of array
+		var bottomRandomValue = bottomValue[index];
+		//I remove the index of array and only remove 1
+		bottomValue.splice(index, 1);
+
+		tileCount++;
+		
+		var divTileContainer = document.createElement("div");
+		divTileContainer.setAttribute("class", "tile-container");
+		
+		contentContainer.appendChild(divTileContainer);
+
+		var innerTileContainerFront = document.createElement("div");
+		innerTileContainerFront.class = "front";
+		innerTileContainerFront.setAttribute("class", "front");
+
+	/*
+		
+		var back = document.createElement("div");
+		back.class = "back";
+		back.setAttribute("class", "back");
+		divTileContainer.appendChild(back);
+	*/
+		//create a var that holds the hiddenNumber
+		//var back = document.createElement("div");
+
+		var innerTileContainerBack = document.createElement("div");
+		innerTileContainerBack.class = "back";
+		innerTileContainerBack.setAttribute("class", "back");
+
+		divTileContainer.appendChild(innerTileContainerFront);
+		divTileContainer.appendChild(innerTileContainerBack);
+
+		//instantiate Tile (line 44) and give the following parameters
+		var NewTile = new Tile(bottomRandomValue, false, innerTileContainerBack, innerTileContainerFront, divTileContainer);
+
+		//push the newly created Tile to array tileContainer and keep doing this until bottomValue is empty.
+		tileContainer.push(NewTile);
+	}
+	while(bottomValue.length > 0);
 }
 
 //I create an object named "tile", which should be used in a loop that spawns the tiles. Constructor
@@ -74,54 +126,6 @@ function Tile(hiddenNumber, isFaceUp, back, front, tileContainer)
 	this.front = front;
 	this.tileContainer = tileContainer;
 }
-
-var contentContainer = document.getElementById("content-container");
-
-do
-{
-	//I create a var to hold the index number of the array, which is chosen at random between 0 and array.length. Math.floor makes sure the number is never higher than the array.lenght by rounding down (1.9 ==> 1)
-	var index = Math.floor(Math.random() * bottomValue.length);
-	//I create a var which holds the value of the chosen index of array
-	var bottomRandomValue = bottomValue[index];
-	//I remove the index of array and only remove 1
-	bottomValue.splice(index, 1);
-
-	tileCount++;
-	
-	var divTileContainer = document.createElement("div");
-	divTileContainer.setAttribute("class", "tile-container");
-	
-	contentContainer.appendChild(divTileContainer);
-
-	var innerTileContainerFront = document.createElement("div");
-	innerTileContainerFront.class = "front";
-	innerTileContainerFront.setAttribute("class", "front");
-
-/*
-	
-	var back = document.createElement("div");
-	back.class = "back";
-	back.setAttribute("class", "back");
-	divTileContainer.appendChild(back);
-*/
-	//create a var that holds the hiddenNumber
-	//var back = document.createElement("div");
-
-	var innerTileContainerBack = document.createElement("div");
-	innerTileContainerBack.class = "back";
-	innerTileContainerBack.setAttribute("class", "back");
-
-	divTileContainer.appendChild(innerTileContainerFront);
-	divTileContainer.appendChild(innerTileContainerBack);
-
-	//instantiate Tile (line 44) and give the following parameters
-	var NewTile = new Tile(bottomRandomValue, false, innerTileContainerBack, innerTileContainerFront, divTileContainer);
-
-	//push the newly created Tile to array tileContainer and keep doing this until bottomValue is empty.
-	tileContainer.push(NewTile);
-}
-while(bottomValue.length > 0);
-
 
 
 //document.getElementByClassName("tile");
@@ -307,14 +311,15 @@ function removeTile(i, j)
 	setTimeout(function ()
 	{
 		//remove the div front and back from the html document
-		i.front.remove(innerTileContainerFront);
-		i.back.remove(innerTileContainerBack);
-		j.front.remove(innerTileContainerFront);
-		j.back.remove(innerTileContainerBack);
+		i.front.remove(i.front);
+		i.back.remove(i.back);
+
+		j.front.remove(j.front);
+		j.back.remove(j.back);
 
 		tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
 		tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
-	}, 1000);
+	}, 300);
 
 }
 
@@ -331,3 +336,5 @@ function turnTileDown(i, j)
 	i.isFaceUp = false;
 	j.isFaceUp = false;
 }
+
+userInput();

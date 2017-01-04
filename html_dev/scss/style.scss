@@ -79,7 +79,7 @@ html, body
 
 .tile-container.removed
 {
-	@include fadeOut(1s, 0);
+	@include fadeOut(0.3s, 0);
 }
 
 /*when tile-container gets flipped, rotate*/
