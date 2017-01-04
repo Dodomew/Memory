@@ -5,6 +5,7 @@ $purple: #832F68;
 $lightpurple: #A8598E;
 $darkpurple: #631449;
 $purpleshadow: #3F032B; //24.7, 1.2, 16.9
+$whitefont: #efefef;
 
 @import url('https://fonts.googleapis.com/css?family=Droid+Sans');
 
@@ -24,6 +25,15 @@ $purpleshadow: #3F032B; //24.7, 1.2, 16.9
 	display: inline-block;
 }
 
+@mixin fadeOut($speed, $opacity)
+{
+	-webkit-transition: opacity $speed ease-in-out;
+    -moz-transition: opacity $speed ease-in-out;
+    -ms-transition: opacity $speed ease-in-out;
+    -o-transition: opacity $speed ease-in-out;
+     opacity: $opacity;
+}
+
 html, body
 {
 	background-color: $purple;
@@ -32,6 +42,18 @@ html, body
 	padding: 0;
 	margin: 0;
 	font-family: 'Droid Sans', sans-serif;
+	color: $whitefont;
+}
+
+#header
+{
+	width: 70%;
+	height: auto;
+	margin: auto;
+	text-align: center;
+	font-size: 2em;
+	letter-spacing: 0.1em;
+	padding-top: 1vh;
 }
 
 #content-container
@@ -40,17 +62,27 @@ html, body
 	height: auto;
 	margin: auto;
 	padding: 1vw;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
-/* entire container, keeps perspective */
+/*create container and make it 3d*/
 .tile-container 
 {
 	perspective: 1000px;
-	@include box-shadows(20px);
 	@include tile(75px, 75px, 1vw);
 	position: relative;
+	opacity: 1;
 }
 
+.tile-container.removed
+{
+	@include fadeOut(1s, 0);
+}
+
+/*when tile-container gets flipped, rotate*/
 .tile-container.flipped .front
 {
 	transform: rotateY(180deg);
@@ -70,14 +102,15 @@ html, body
 	top: 0;
 	left: 0;
 	-webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    backface-visibility: hidden; //this hides the other face
   	-webkit-transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
     text-align: center;
 	line-height: 75px;
 	vertical-align: top;
 	transition: all 0.2s ease;
-	font-size: 2em;
+	font-size: 2.5em;
+	@include box-shadows(20px);
 }
 
 .front 
@@ -95,5 +128,5 @@ html, body
 {
 	-webkit-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
-	background-color: red;
+	background-color: $darkgreen;
 }

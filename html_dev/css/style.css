@@ -6,6 +6,17 @@ html, body {
   padding: 0;
   margin: 0;
   font-family: 'Droid Sans', sans-serif;
+  color: #efefef;
+}
+
+#header {
+  width: 70%;
+  height: auto;
+  margin: auto;
+  text-align: center;
+  font-size: 2em;
+  letter-spacing: 0.1em;
+  padding-top: 1vh;
 }
 
 #content-container {
@@ -13,21 +24,32 @@ html, body {
   height: auto;
   margin: auto;
   padding: 1vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-/* entire container, keeps perspective */
+/*create container and make it 3d*/
 .tile-container {
   perspective: 1000px;
-  -webkit-box-shadow: 0px 0px 20px -4px #190111;
-  -moz-box-shadow: 0px 0px 20px -4px #190111;
-  box-shadow: 0px 0px 20px -4px #190111;
   width: 75px;
   height: 75px;
   margin: 1vw;
   display: inline-block;
   position: relative;
+  opacity: 1;
 }
 
+.tile-container.removed {
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -ms-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  opacity: 0;
+}
+
+/*when tile-container gets flipped, rotate*/
 .tile-container.flipped .front {
   transform: rotateY(180deg);
 }
@@ -51,7 +73,10 @@ html, body {
   line-height: 75px;
   vertical-align: top;
   transition: all 0.2s ease;
-  font-size: 2em;
+  font-size: 2.5em;
+  -webkit-box-shadow: 0px 0px 20px -4px #190111;
+  -moz-box-shadow: 0px 0px 20px -4px #190111;
+  box-shadow: 0px 0px 20px -4px #190111;
 }
 
 .front {
@@ -65,7 +90,7 @@ html, body {
 .back {
   -webkit-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
-  background-color: red;
+  background-color: #5F7A19;
 }
 
 /*# sourceMappingURL=style.css.map */

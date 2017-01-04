@@ -38,12 +38,32 @@ the do while loop stops when array.length =! 0 . If you do > 0 , it stops immedi
 */
  
 //I create an array to hold the bottom values
-var bottomValue = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10]; 
+//var bottomValue = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10]; 
+var bottomValue = [];
 var tileCount = 0;
 //array to hold the Tile objects
 var tileContainer = []; 
 
+function userInput()
+{
+	var userNumber = parseInt(document.getElementById("userInputField").value);
+	/*
+	var userNumber = document.getElementById("userInputField");
+	numberOfPairs = parseInt(userNumber.value);
+	console.log(numberOfPairs);
+	return numberOfPairs;
+	*/
+	console.log(userNumber);
+	//return userNumber;
 
+	//create a loop which outputs 0,0,1,1,2,2 etc for the bottomValue array
+	for (var i = 0; i < userNumber; i++) 
+	{
+		bottomValue.push(i);
+		bottomValue.push(i);
+		console.log(bottomValue);
+	}
+}
 
 //I create an object named "tile", which should be used in a loop that spawns the tiles. Constructor
 function Tile(hiddenNumber, isFaceUp, back, front, tileContainer)
@@ -97,9 +117,7 @@ do
 	//instantiate Tile (line 44) and give the following parameters
 	var NewTile = new Tile(bottomRandomValue, false, innerTileContainerBack, innerTileContainerFront, divTileContainer);
 
-
-	//append the instantiated object's property back to the body element, which reads: div class = "tile"
-	//document.body.appendChild(NewTile.back;
+	//push the newly created Tile to array tileContainer and keep doing this until bottomValue is empty.
 	tileContainer.push(NewTile);
 }
 while(bottomValue.length > 0);
@@ -281,11 +299,23 @@ function checkNumberOfTilesClicked()
 
 function removeTile(i, j)
 {
-	i.back.remove(innerTileContainerBack);
-	j.back.remove(innerTileContainerBack);
+	//add .removed class to tile-container
+	i.tileContainer.classList.add("removed");
+	j.tileContainer.classList.add("removed");
 
-	tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
-	tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
+	//set timeOut for code underneath, so that the animation first completes then gets removed
+	setTimeout(function ()
+	{
+		//remove the div front and back from the html document
+		i.front.remove(innerTileContainerFront);
+		i.back.remove(innerTileContainerBack);
+		j.front.remove(innerTileContainerFront);
+		j.back.remove(innerTileContainerBack);
+
+		tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
+		tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
+	}, 1000);
+
 }
 
 function turnTileDown(i, j)
@@ -301,24 +331,3 @@ function turnTileDown(i, j)
 	i.isFaceUp = false;
 	j.isFaceUp = false;
 }
-
-/*function flipCard() 
-{
-	var cards = document.querySelectorAll(".tile-container");
-	for ( var i  = 0, len = cards.length; i < len; i++ ) 
-	{
-		var card = cards[i];
-		clickListener( card );
-	}
-
-	function clickListener(card) 
-	{
-		card.addEventListener( "click", function() 
-		{
-		  var c = this.classList;
-		  c.contains("flipped") === true ? c.remove("flipped") : c.add("flipped");
-		});
-	}
-}
-
-flipCard();*/
