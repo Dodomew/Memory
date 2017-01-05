@@ -6,6 +6,12 @@ $lightpurple: #A8598E;
 $darkpurple: #631449;
 $purpleshadow: #3F032B; //24.7, 1.2, 16.9
 $whitefont: #efefef;
+$orange: #f49e42;
+$lightorange: #ffb668;
+$darkorange: #ff921e;
+$black: #191919;
+
+$fontSize: calc(0.75em + 1vmin);
 
 @import url('https://fonts.googleapis.com/css?family=Droid+Sans');
 
@@ -34,6 +40,14 @@ $whitefont: #efefef;
      opacity: $opacity;
 }
 
+@mixin animationTransition($transitionSpeed)
+{
+	-webkit-transition: all $transitionSpeed ease-in-out;
+	-moz-transition: all $transitionSpeed ease-in-out;
+	-ms-transition: all $transitionSpeed ease-in-out;
+	-o-transition: all $transitionSpeed ease-in-out;
+}
+
 html, body
 {
 	background-color: $purple;
@@ -42,7 +56,9 @@ html, body
 	padding: 0;
 	margin: 0;
 	font-family: 'Droid Sans', sans-serif;
+	font-size: $fontSize;
 	color: $whitefont;
+	overflow-x: hidden;
 }
 
 #header
@@ -51,7 +67,7 @@ html, body
 	height: auto;
 	margin: auto;
 	text-align: center;
-	font-size: 2em;
+	//font-size: 2em;
 	letter-spacing: 0.1em;
 	padding-top: 1vh;
 }
@@ -103,13 +119,11 @@ html, body
 	left: 0;
 	-webkit-backface-visibility: hidden;
     backface-visibility: hidden; //this hides the other face
-  	-webkit-transition: -webkit-transform 0.3s;
-    transition: transform 0.3s;
+  	@include animationTransition(0.3s);
     text-align: center;
-	line-height: 75px;
+	line-height: 75px; //line-height = height of tile-container, so that it centers the text in the middle
 	vertical-align: top;
-	transition: all 0.2s ease;
-	font-size: 2.5em;
+	font-size: $fontSize;
 	@include box-shadows(20px);
 }
 
@@ -128,5 +142,84 @@ html, body
 {
 	-webkit-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
+	background-color: $orange;
+}
+
+#inputContainer
+{
+	@extend #header;
+}
+
+#userInputField
+{
+	background-color: $lightgreen;
+	border-radius: 5px;
+    border: 2px solid $whitefont;
+    padding: 1vh;
+    @include box-shadows(17px);
+    @include animationTransition(0.2s);
+    color: $black;
+    font-weight: bold;
+    margin: 1vw;
+}
+
+#userInputField:focus
+{
 	background-color: $darkgreen;
+	color: $whitefont;
+}
+
+input[type="button"] 
+{
+    background-color: $lightorange;
+	@extend #userInputField;
+}
+
+input[type="button"]:hover
+{
+	background-color: $darkorange;
+	color: $whitefont;
+}
+
+#footer
+{
+	@extend #header;
+	width: 100%;
+	font-size: $fontSize;
+}
+
+#footer a
+{
+	color: $whitefont;
+	text-decoration: none;
+	@include animationTransition(0.2s);
+}
+
+#footer a:hover
+{
+	color: $orange;
+}
+
+@media (min-width: 1024px)
+{
+	.tile-container 
+	{
+		@include tile(125px, 125px, 1vw);
+	}
+
+	.front, .back 
+	{
+		line-height: 125px;
+		font-size: 2.5em;
+	}
+
+	#userInputField
+	{
+		font-size: 1em;
+	}
+
+	input[type="button"]
+	{
+		font-size: 1em;
+	}
 }

@@ -296,7 +296,7 @@ function checkNumberOfTilesClicked()
 	});
 
 	return faceUpCounter;
-	
+		
 }
 
 

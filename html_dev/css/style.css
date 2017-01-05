@@ -6,15 +6,16 @@ html, body {
   padding: 0;
   margin: 0;
   font-family: 'Droid Sans', sans-serif;
+  font-size: calc(0.75em + 1vmin);
   color: #efefef;
+  overflow-x: hidden;
 }
 
-#header {
+#header, #inputContainer, #footer {
   width: 70%;
   height: auto;
   margin: auto;
   text-align: center;
-  font-size: 2em;
   letter-spacing: 0.1em;
   padding-top: 1vh;
 }
@@ -67,13 +68,14 @@ html, body {
   left: 0;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  -webkit-transition: -webkit-transform 0.3s;
-  transition: transform 0.3s;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
   text-align: center;
   line-height: 75px;
   vertical-align: top;
-  transition: all 0.2s ease;
-  font-size: 2.5em;
+  font-size: calc(0.75em + 1vmin);
   -webkit-box-shadow: 0px 0px 20px -4px #190111;
   -moz-box-shadow: 0px 0px 20px -4px #190111;
   box-shadow: 0px 0px 20px -4px #190111;
@@ -90,7 +92,78 @@ html, body {
 .back {
   -webkit-transform: rotateY(-180deg);
   transform: rotateY(-180deg);
+  background-color: #f49e42;
+}
+
+#userInputField, input[type="button"] {
+  background-color: #B5D06E;
+  border-radius: 5px;
+  border: 2px solid #efefef;
+  padding: 1vh;
+  -webkit-box-shadow: 0px 0px 17px -4px #190111;
+  -moz-box-shadow: 0px 0px 17px -4px #190111;
+  box-shadow: 0px 0px 17px -4px #190111;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  color: #191919;
+  font-weight: bold;
+  margin: 1vw;
+}
+
+#userInputField:focus, input[type="button"]:focus {
   background-color: #5F7A19;
+  color: #efefef;
+}
+
+input[type="button"] {
+  background-color: #ffb668;
+}
+
+input[type="button"]:hover {
+  background-color: #ff921e;
+  color: #efefef;
+}
+
+#footer {
+  width: 100%;
+  font-size: calc(0.75em + 1vmin);
+}
+
+#footer a {
+  color: #efefef;
+  text-decoration: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+}
+
+#footer a:hover {
+  color: #f49e42;
+}
+
+@media (min-width: 1024px) {
+  .tile-container {
+    width: 125px;
+    height: 125px;
+    margin: 1vw;
+    display: inline-block;
+  }
+
+  .front, .back {
+    line-height: 125px;
+    font-size: 2.5em;
+  }
+
+  #userInputField, input[type="button"] {
+    font-size: 1em;
+  }
+
+  input[type="button"] {
+    font-size: 1em;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
