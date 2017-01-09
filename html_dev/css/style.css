@@ -40,6 +40,27 @@ html, body {
   display: inline-block;
   position: relative;
   opacity: 1;
+  -ms-transform: scale(0, 0);
+  /* IE 9 */
+  -webkit-transform: scale(0, 0);
+  /* Safari */
+  transform: scale(0, 0);
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+}
+
+.tile-container.scaled {
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  -ms-transform: scale(1, 1);
+  /* IE 9 */
+  -webkit-transform: scale(1, 1);
+  /* Safari */
+  transform: scale(1, 1);
 }
 
 .tile-container.removed {

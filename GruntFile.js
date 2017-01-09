@@ -3,9 +3,9 @@ module.exports = function(grunt)
 	//1. Configure my tasks
 	grunt.initConfig
 	(
-		{ 
+		{
 
-			pkg: grunt.file.readJSON('package.json'), 
+			pkg: grunt.file.readJSON('package.json'),
 			//define tasks
 
 			//first task
@@ -21,38 +21,38 @@ module.exports = function(grunt)
 			},
 
 			sync: //parent task
-			{ 
+			{
 	            development: //first child task
-	            { 
-	                files: 
+	            {
+	                files:
 	                [
-	                    { 
+	                    {
 		                    cwd: 'html_dev', //I sync files in this location
 		                    src: ['**/*.js', '**/*.css', '**/*.php', '**/*.html', '**/*.jpg', //check all files with these extensions
-		                    '!**/node_modules/**' /* but exclude txt files */ ], 
+		                    '!**/node_modules/**' /* but exclude txt files */ ],
 		                    dest: 'C:/wamp64/www/MemoryGame' //any output I make is put in here
 	                    } // makes all src relative to Current Working Directory or cwd
 	                ],
 
-	                verbose: true, // Default: false 
-	                failOnError: true, // Fail the task when copying is not possible. Default: false 
-	                updateAndDelete: true // Remove all files from dest that are not found in src. Default: false 
+	                verbose: true, // Default: false
+	                failOnError: true, // Fail the task when copying is not possible. Default: false
+	                updateAndDelete: true // Remove all files from dest that are not found in src. Default: false
             	},
 
-	            live: 
+	            live:
 	            { //second child task
-	                files: 
+	                files:
 	                [
-	                    { 
+	                    {
 		                    cwd: 'html_dev', //I sync files in this location
-		                    src: ['**/*.js', '**/*.css', '**/*.php', '**/*.html', '**/*.jpg'], 
-		                    dest: 'C:/wamp64/www/MemoryGame' 
-		                } 	// makes all src relative to cwd 
+		                    src: ['**/*.js', '**/*.css', '**/*.php', '**/*.html', '**/*.jpg'],
+		                    dest: 'C:/wamp64/www/MemoryGame'
+		                } 	// makes all src relative to cwd
 	                ],
 
-	                verbose: true, // Default: false 
-	                failOnError: true, // Fail the task when copying is not possible. Default: false 
-	                updateAndDelete: true // Remove all files from dest that are not found in src. Default: false 
+	                verbose: true, // Default: false
+	                failOnError: true, // Fail the task when copying is not possible. Default: false
+	                updateAndDelete: true // Remove all files from dest that are not found in src. Default: false
 	             }
             },
 
@@ -79,7 +79,7 @@ module.exports = function(grunt)
 	                files: 'html_dev/**/*.*', //check this folder for any file that changes
 	                tasks: ['sync:development']  //Specifically run the 'development' subtask of 'sync'
 	            }
-            		
+
         	}
 
 		}
@@ -92,6 +92,6 @@ module.exports = function(grunt)
 
 	//3. Set up my tasks or 'register'
 	grunt.registerTask('Default', ['watch']); //(taskName, taskList) . 'default' is run when you do not run specific grunt tasks, so you run in CMD 'grunt'
-	//grunt.registerTask('release',['sass', 'sync:live', 'minify', 'upload']); here the task 'release' runs the subtasks 'sass', 'sync:live', 'minify', 'upload' => 
+	//grunt.registerTask('release',['sass', 'sync:live', 'minify', 'upload']); here the task 'release' runs the subtasks 'sass', 'sync:live', 'minify', 'upload' =>
 	//in CMD write 'grunt release'. Run specific task : 'grunt release:sass'
 }

@@ -48,6 +48,13 @@ $fontSize: calc(0.75em + 1vmin);
 	-o-transition: all $transitionSpeed ease-in-out;
 }
 
+@mixin scaleOnCreation($scaleFactor)
+{
+	-ms-transform: scale($scaleFactor, $scaleFactor); /* IE 9 */
+	-webkit-transform: scale($scaleFactor, $scaleFactor); /* Safari */
+	transform: scale($scaleFactor, $scaleFactor);
+}
+
 html, body
 {
 	background-color: $purple;
@@ -85,12 +92,20 @@ html, body
 }
 
 /*create container and make it 3d*/
-.tile-container 
+.tile-container
 {
 	perspective: 1000px;
 	@include tile(75px, 75px, 1vw);
 	position: relative;
 	opacity: 1;
+	@include scaleOnCreation(0);
+	@include animationTransition(1s);
+}
+
+.tile-container.scaled
+{
+	@include animationTransition(1s);
+	@include scaleOnCreation(1);
 }
 
 .tile-container.removed
@@ -110,7 +125,7 @@ html, body
 }
 
 /* hide back of pane during swap */
-.front, .back 
+.front, .back
 {
 	position: absolute;
 	width: 100%;
@@ -127,7 +142,7 @@ html, body
 	@include box-shadows(20px);
 }
 
-.front 
+.front
 {
 	background-color: $green;
 
@@ -138,7 +153,7 @@ html, body
 	background-color: $lightgreen;
 }
 
-.back 
+.back
 {
 	-webkit-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
@@ -169,7 +184,7 @@ html, body
 	color: $whitefont;
 }
 
-input[type="button"] 
+input[type="button"]
 {
     background-color: $lightorange;
 	@extend #userInputField;
@@ -202,12 +217,12 @@ input[type="button"]:hover
 
 @media (min-width: 1024px)
 {
-	.tile-container 
+	.tile-container
 	{
 		@include tile(125px, 125px, 1vw);
 	}
 
-	.front, .back 
+	.front, .back
 	{
 		line-height: 125px;
 		font-size: 2.5em;
