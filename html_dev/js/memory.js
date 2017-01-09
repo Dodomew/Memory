@@ -48,6 +48,7 @@ var contentContainer = document.getElementById("content-container");
 
 function userInput()
 {
+	tileContainer.length = 0;
 	bottomValue.length = 0;
 	document.getElementById("content-container").innerHTML = "";
 
@@ -116,7 +117,9 @@ function userInput()
 
 	}
 	while(bottomValue.length > 0);
-  scaleIn();
+ //scaleIndex = 0;
+	scaleIn(tileContainer);
+
 }
 
 
@@ -320,6 +323,10 @@ function removeTile(i, j)
 
 		tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
 		tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
+
+		console.log(tileContainer);
+		youHaveWon(tileContainer);
+
 	}, 300);
 
 }
@@ -348,23 +355,35 @@ function scaleIn()
     {
       tileContainer[i].tileContainer.classList.add("scaled");
     }
-  }, randomIntFromInterval(50, 300));
+  }, randomIntFromInterval(50, 500));
 }
 */
-
-function scaleIn()
+/*
+var scaleIndex = 0;
+function scaleIn() 
 {
-   setTimeout(function ()
-   {
-      for (var i = 0; i < tileContainer.length; i++)
-      {
-        if (i < tileContainer.length)
-        {
-          tileContainer[i].tileContainer.classList.add("scaled");
-          //myLoop();
-        }
+    tileContainer[scaleIndex].tileContainer.classList.add("scaled");
+    scaleIndex++;
+    console.log(scaleIndex);
+
+    if( scaleIndex < tileContainer.length )
+    {
+        setTimeout( scaleIn(), 500 );
     }
-   }, randomIntFromInterval(50, 300))
+}
+*/
+function scaleIn(tileContainer)
+{
+	for (var i = 0; i < tileContainer.length; i++) 
+	{
+		(function (i)
+		{
+			setTimeout(function ()
+			{
+				tileContainer[i].tileContainer.classList.add("scaled");
+			}, randomIntFromInterval(10, 75) * i );
+		})(i);
+	};
 }
 
 // What it does "extra" is it allows random intervals that do not start with 1.
@@ -373,6 +392,18 @@ function scaleIn()
 function randomIntFromInterval(min,max)
 {
     return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function youHaveWon(k)
+{
+	if(k.length == 0)
+	{
+		contentContainer.innerHTML = "";
+		var youWonDiv = document.createElement("div");
+		youWonDiv.setAttribute("class", "youWonContainer");
+		youWonDiv.innerHTML = "You won!";
+		contentContainer.appendChild(youWonDiv);
+	}
 }
 
 userInput();
