@@ -55,6 +55,37 @@ $fontSize: calc(0.75em + 1vmin);
 	transform: scale($scaleFactor, $scaleFactor);
 }
 
+@mixin rotateYTile($rotation)
+{
+	-ms-transform: rotateY($rotation); /* IE 9 */
+	-webkit-transform: rotateY($rotation); /* Safari */
+	transform: rotateY($rotation);
+}
+
+@mixin displayFlex()
+{
+	display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+	text-align: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+@mixin marginAndPadding($inPixels, $inVW)
+{
+	padding: $inPixels;
+	padding: $inVW;
+	margin: $inPixels;
+	margin: $inVW;
+}
+
 html, body
 {
 	background-color: $purple;
@@ -66,45 +97,44 @@ html, body
 	font-size: $fontSize;
 	color: $whitefont;
 	overflow-x: hidden;
-	-webkit-text-size-adjust: auto;
 }
 
 #header
 {
 	width: 70%;
 	height: auto;
-	margin: auto;
 	text-align: center;
 	letter-spacing: 0.1em;
+	@include marginAndPadding(16px, 0vw);
 	padding-top: 1vh;
+	margin: auto;
 }
 
 #content-container
 {
 	width: 70%;
 	height: auto;
-	min-height: 50%;
+	@include marginAndPadding(16px, 1vw);
+	@include displayFlex;
 	margin: auto;
-	padding: 1vw;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
 }
 
 /*create container and make it 3d*/
 .tile-container
 {
 	perspective: 1000px;
+	margin: 16px;
 	@include tile(75px, 75px, 1vw);
 	position: relative;
 	opacity: 1;
 	@include scaleOnCreation(0);
-	@include animationTransition(0.3s);
+	@include animationTransition(1s);
+	cursor: pointer;
 }
 
 .tile-container.scaled
 {
+	@include animationTransition(1s);
 	@include scaleOnCreation(1);
 }
 
@@ -116,12 +146,12 @@ html, body
 /*when tile-container gets flipped, rotate*/
 .tile-container.flipped .front
 {
-	transform: rotateY(180deg);
+	@include rotateYTile(180deg);
 }
 
 .tile-container.flipped .back
 {
-	transform: rotateY(0deg);
+	@include rotateYTile(0deg);
 }
 
 /* hide back of pane during swap */
@@ -133,12 +163,12 @@ html, body
 	top: 0;
 	left: 0;
 	-webkit-backface-visibility: hidden;
-    backface-visibility: hidden; //this hides the other face
-  	@include animationTransition(0.3s);
-    text-align: center;
+  backface-visibility: hidden; //this hides the other face
+	@include animationTransition(0.3s);
+  text-align: center;
 	line-height: 75px; //line-height = height of tile-container, so that it centers the text in the middle
 	vertical-align: top;
-	font-size: 3em;
+	font-size: $fontSize;
 	@include box-shadows(20px);
 }
 
@@ -155,8 +185,7 @@ html, body
 
 .back
 {
-	-webkit-transform: rotateY(-180deg);
-    transform: rotateY(-180deg);
+	@include rotateYTile(-180deg);
 	background-color: $orange;
 }
 
@@ -169,13 +198,12 @@ html, body
 {
 	background-color: $lightgreen;
 	border-radius: 5px;
-    border: 2px solid $whitefont;
-    padding: 1vh;
-    @include box-shadows(17px);
-    @include animationTransition(0.2s);
-    color: $black;
-    font-weight: bold;
-    margin: 1vw;
+  border: 2px solid $whitefont;
+	@include marginAndPadding(16px, 1vw);
+  @include box-shadows(17px);
+  @include animationTransition(0.2s);
+  color: $black;
+  font-weight: bold;
 }
 
 #userInputField:focus
@@ -186,7 +214,7 @@ html, body
 
 input[type="button"]
 {
-    background-color: $lightorange;
+  background-color: $lightorange;
 	@extend #userInputField;
 }
 
@@ -225,7 +253,7 @@ input[type="button"]:hover
 	.front, .back
 	{
 		line-height: 125px;
-		font-size: 3.5em;
+		font-size: 2.5em;
 	}
 
 	#userInputField

@@ -48,7 +48,6 @@ var contentContainer = document.getElementById("content-container");
 
 function userInput()
 {
-	tileContainer.length = 0;
 	bottomValue.length = 0;
 	document.getElementById("content-container").innerHTML = "";
 
@@ -117,9 +116,7 @@ function userInput()
 
 	}
 	while(bottomValue.length > 0);
- //scaleIndex = 0;
-	scaleIn(tileContainer);
-
+  scaleIn();
 }
 
 
@@ -165,8 +162,9 @@ function Tile(hiddenNumber, isFaceUp, back, front, tileContainer)
 //e is then defined as window.event. When you check web console you get MouseEvent, which is e. This e has a lot of properties, including src.Element.
 document.addEventListener('click', function objectFinder(e)
 {
-    e = window.event;
-    var target = e.target || e.srcElement; //the target can be either the e.target or e.srcElements, both properties work
+    e = window.event || e;
+    var target = e.target || e.srcElement;
+		console.log(e.target); //the target can be either the e.target or e.srcElements, both properties work
 
     if (checkNumberOfTilesClicked() <= 1)
     {
@@ -323,10 +321,6 @@ function removeTile(i, j)
 
 		tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
 		tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
-
-		console.log(tileContainer);
-		youHaveWon(tileContainer);
-
 	}, 300);
 
 }
@@ -346,44 +340,19 @@ function turnTileDown(i, j)
 }
 
 //scale the created tiles from 0 to 1 with css classes
-/*
 function scaleIn()
 {
-  setTimeout(function()
-  {
-    for (var i = 0; i < tileContainer.length; i++)
-    {
-      tileContainer[i].tileContainer.classList.add("scaled");
+   setTimeout(function ()
+   {
+      for (var i = 0; i < tileContainer.length; i++)
+      {
+        if (i < tileContainer.length)
+        {
+          tileContainer[i].tileContainer.classList.add("scaled");
+          //myLoop();
+        }
     }
-  }, randomIntFromInterval(50, 500));
-}
-*/
-/*
-var scaleIndex = 0;
-function scaleIn() 
-{
-    tileContainer[scaleIndex].tileContainer.classList.add("scaled");
-    scaleIndex++;
-    console.log(scaleIndex);
-
-    if( scaleIndex < tileContainer.length )
-    {
-        setTimeout( scaleIn(), 500 );
-    }
-}
-*/
-function scaleIn(tileContainer)
-{
-	for (var i = 0; i < tileContainer.length; i++) 
-	{
-		(function (i)
-		{
-			setTimeout(function ()
-			{
-				tileContainer[i].tileContainer.classList.add("scaled");
-			}, randomIntFromInterval(10, 75) * i );
-		})(i);
-	};
+   }, randomIntFromInterval(50, 300))
 }
 
 // What it does "extra" is it allows random intervals that do not start with 1.
@@ -392,18 +361,6 @@ function scaleIn(tileContainer)
 function randomIntFromInterval(min,max)
 {
     return Math.floor(Math.random()*(max-min+1)+min);
-}
-
-function youHaveWon(k)
-{
-	if(k.length == 0)
-	{
-		contentContainer.innerHTML = "";
-		var youWonDiv = document.createElement("div");
-		youWonDiv.setAttribute("class", "youWonContainer");
-		youWonDiv.innerHTML = "You won!";
-		contentContainer.appendChild(youWonDiv);
-	}
 }
 
 userInput();

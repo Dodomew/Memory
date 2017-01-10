@@ -9,33 +9,47 @@ html, body {
   font-size: calc(0.75em + 1vmin);
   color: #efefef;
   overflow-x: hidden;
-  -webkit-text-size-adjust: auto;
 }
 
 #header, #inputContainer, #footer {
   width: 70%;
   height: auto;
-  margin: auto;
   text-align: center;
   letter-spacing: 0.1em;
+  padding: 16px;
+  padding: 0vw;
+  margin: 16px;
+  margin: 0vw;
   padding-top: 1vh;
+  margin: auto;
 }
 
 #content-container {
   width: 70%;
   height: auto;
-  min-height: 50%;
-  margin: auto;
+  padding: 16px;
   padding: 1vw;
+  margin: 16px;
+  margin: 1vw;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: row;
   flex-direction: row;
+  -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
+  text-align: center;
+  -webkit-justify-content: center;
   justify-content: center;
+  margin: auto;
 }
 
 /*create container and make it 3d*/
 .tile-container {
   perspective: 1000px;
+  margin: 16px;
   width: 75px;
   height: 75px;
   margin: 1vw;
@@ -47,13 +61,18 @@ html, body {
   -webkit-transform: scale(0, 0);
   /* Safari */
   transform: scale(0, 0);
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  cursor: pointer;
 }
 
 .tile-container.scaled {
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
   -ms-transform: scale(1, 1);
   /* IE 9 */
   -webkit-transform: scale(1, 1);
@@ -71,10 +90,18 @@ html, body {
 
 /*when tile-container gets flipped, rotate*/
 .tile-container.flipped .front {
+  -ms-transform: rotateY(180deg);
+  /* IE 9 */
+  -webkit-transform: rotateY(180deg);
+  /* Safari */
   transform: rotateY(180deg);
 }
 
 .tile-container.flipped .back {
+  -ms-transform: rotateY(0deg);
+  /* IE 9 */
+  -webkit-transform: rotateY(0deg);
+  /* Safari */
   transform: rotateY(0deg);
 }
 
@@ -94,7 +121,7 @@ html, body {
   text-align: center;
   line-height: 75px;
   vertical-align: top;
-  font-size: 3em;
+  font-size: calc(0.75em + 1vmin);
   -webkit-box-shadow: 0px 0px 20px -4px #190111;
   -moz-box-shadow: 0px 0px 20px -4px #190111;
   box-shadow: 0px 0px 20px -4px #190111;
@@ -109,7 +136,10 @@ html, body {
 }
 
 .back {
+  -ms-transform: rotateY(-180deg);
+  /* IE 9 */
   -webkit-transform: rotateY(-180deg);
+  /* Safari */
   transform: rotateY(-180deg);
   background-color: #f49e42;
 }
@@ -118,7 +148,10 @@ html, body {
   background-color: #B5D06E;
   border-radius: 5px;
   border: 2px solid #efefef;
-  padding: 1vh;
+  padding: 16px;
+  padding: 1vw;
+  margin: 16px;
+  margin: 1vw;
   -webkit-box-shadow: 0px 0px 17px -4px #190111;
   -moz-box-shadow: 0px 0px 17px -4px #190111;
   box-shadow: 0px 0px 17px -4px #190111;
@@ -128,7 +161,6 @@ html, body {
   -o-transition: all 0.2s ease-in-out;
   color: #191919;
   font-weight: bold;
-  margin: 1vw;
 }
 
 #userInputField:focus, input[type="button"]:focus {
@@ -173,7 +205,7 @@ input[type="button"]:hover {
 
   .front, .back {
     line-height: 125px;
-    font-size: 3.5em;
+    font-size: 2.5em;
   }
 
   #userInputField, input[type="button"] {
