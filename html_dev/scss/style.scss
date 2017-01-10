@@ -15,7 +15,6 @@ $fontSize: calc(0.75em + 1vmin);
 
 @import url('https://fonts.googleapis.com/css?family=Droid+Sans');
 
-
 @mixin box-shadows($blur)
 {
 	-webkit-box-shadow: 0px 0px $blur -4px rgba(24.7, 1.2, 16.9,1);
@@ -46,6 +45,7 @@ $fontSize: calc(0.75em + 1vmin);
 	-moz-transition: all $transitionSpeed ease-in-out;
 	-ms-transition: all $transitionSpeed ease-in-out;
 	-o-transition: all $transitionSpeed ease-in-out;
+	transition: all $transitionSpeed ease-in-out;
 }
 
 @mixin scaleOnCreation($scaleFactor)
@@ -57,8 +57,9 @@ $fontSize: calc(0.75em + 1vmin);
 
 @mixin rotateYTile($rotation)
 {
-	-ms-transform: rotateY($rotation); /* IE 9 */
-	-webkit-transform: rotateY($rotation); /* Safari */
+	-moz-transform: rotateY($rotation);  /* FF3.5/3.6 */
+	-o-transform: rotateY($rotation);  /* Opera 10.5 */
+	-webkit-transform: rotateY($rotation);  /* Saf3.1+ */
 	transform: rotateY($rotation);
 }
 
@@ -84,6 +85,23 @@ $fontSize: calc(0.75em + 1vmin);
 	padding: $inVW;
 	margin: $inPixels;
 	margin: $inVW;
+}
+
+@mixin setPerspective($perspective)
+{
+	-webkit-perspective: $perspective;
+	-ms-perspective: $perspective;
+	-moz-perspective: $perspective;
+	-o-perspective: $perspective;
+	perspective: $perspective;
+}
+
+@mixin preserve3D
+{
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-o-transform-style: preserve-3d;
+	transform-style: preserve-3d;
 }
 
 html, body
@@ -122,7 +140,7 @@ html, body
 /*create container and make it 3d*/
 .tile-container
 {
-	perspective: 1000px;
+	@include setPerspective(1000px);
 	margin: 16px;
 	@include tile(75px, 75px, 1vw);
 	position: relative;
@@ -143,7 +161,7 @@ html, body
 	@include fadeOut(0.3s, 0);
 }
 
-/*when tile-container gets flipped, rotate*/
+/* when tile-container gets flipped, rotate */
 .tile-container.flipped .front
 {
 	@include rotateYTile(180deg);
@@ -175,7 +193,6 @@ html, body
 .front
 {
 	background-color: $green;
-
 }
 
 .front:hover

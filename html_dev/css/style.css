@@ -48,6 +48,10 @@ html, body {
 
 /*create container and make it 3d*/
 .tile-container {
+  -webkit-perspective: 1000px;
+  -ms-perspective: 1000px;
+  -moz-perspective: 1000px;
+  -o-perspective: 1000px;
   perspective: 1000px;
   margin: 16px;
   width: 75px;
@@ -65,6 +69,7 @@ html, body {
   -moz-transition: all 1s ease-in-out;
   -ms-transition: all 1s ease-in-out;
   -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
   cursor: pointer;
 }
 
@@ -73,6 +78,7 @@ html, body {
   -moz-transition: all 1s ease-in-out;
   -ms-transition: all 1s ease-in-out;
   -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
   -ms-transform: scale(1, 1);
   /* IE 9 */
   -webkit-transform: scale(1, 1);
@@ -88,20 +94,24 @@ html, body {
   opacity: 0;
 }
 
-/*when tile-container gets flipped, rotate*/
+/* when tile-container gets flipped, rotate */
 .tile-container.flipped .front {
-  -ms-transform: rotateY(180deg);
-  /* IE 9 */
+  -moz-transform: rotateY(180deg);
+  /* FF3.5/3.6 */
+  -o-transform: rotateY(180deg);
+  /* Opera 10.5 */
   -webkit-transform: rotateY(180deg);
-  /* Safari */
+  /* Saf3.1+ */
   transform: rotateY(180deg);
 }
 
 .tile-container.flipped .back {
-  -ms-transform: rotateY(0deg);
-  /* IE 9 */
+  -moz-transform: rotateY(0deg);
+  /* FF3.5/3.6 */
+  -o-transform: rotateY(0deg);
+  /* Opera 10.5 */
   -webkit-transform: rotateY(0deg);
-  /* Safari */
+  /* Saf3.1+ */
   transform: rotateY(0deg);
 }
 
@@ -118,6 +128,7 @@ html, body {
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   text-align: center;
   line-height: 75px;
   vertical-align: top;
@@ -136,10 +147,12 @@ html, body {
 }
 
 .back {
-  -ms-transform: rotateY(-180deg);
-  /* IE 9 */
+  -moz-transform: rotateY(-180deg);
+  /* FF3.5/3.6 */
+  -o-transform: rotateY(-180deg);
+  /* Opera 10.5 */
   -webkit-transform: rotateY(-180deg);
-  /* Safari */
+  /* Saf3.1+ */
   transform: rotateY(-180deg);
   background-color: #f49e42;
 }
@@ -159,6 +172,7 @@ html, body {
   -moz-transition: all 0.2s ease-in-out;
   -ms-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   color: #191919;
   font-weight: bold;
 }
@@ -189,6 +203,7 @@ input[type="button"]:hover {
   -moz-transition: all 0.2s ease-in-out;
   -ms-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 #footer a:hover {
