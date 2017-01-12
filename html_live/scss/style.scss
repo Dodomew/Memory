@@ -1,0 +1,240 @@
+$green: #85A239;
+$lightgreen: #B5D06E;
+$darkgreen: #5F7A19;
+$purple: #832F68;
+$lightpurple: #A8598E;
+$darkpurple: #631449;
+$purpleshadow: #3F032B; //24.7, 1.2, 16.9
+$whitefont: #efefef;
+$orange: #f49e42;
+$lightorange: #ffb668;
+$darkorange: #ff921e;
+$black: #191919;
+
+$fontSize: calc(0.75em + 1vmin);
+
+@import url('https://fonts.googleapis.com/css?family=Droid+Sans');
+
+
+@mixin box-shadows($blur)
+{
+	-webkit-box-shadow: 0px 0px $blur -4px rgba(24.7, 1.2, 16.9,1);
+	-moz-box-shadow: 0px 0px $blur -4px rgba(24.7, 1.2, 16.9,1);
+	box-shadow: 0px 0px $blur -4px rgba(24.7, 1.2, 16.9,1);
+}
+
+@mixin tile($width, $height, $margin)
+{
+	width: $width;
+	height: $height;
+	margin: $margin;
+	display: inline-block;
+}
+
+@mixin fadeOut($speed, $opacity)
+{
+	-webkit-transition: opacity $speed ease-in-out;
+    -moz-transition: opacity $speed ease-in-out;
+    -ms-transition: opacity $speed ease-in-out;
+    -o-transition: opacity $speed ease-in-out;
+     opacity: $opacity;
+}
+
+@mixin animationTransition($transitionSpeed)
+{
+	-webkit-transition: all $transitionSpeed ease-in-out;
+	-moz-transition: all $transitionSpeed ease-in-out;
+	-ms-transition: all $transitionSpeed ease-in-out;
+	-o-transition: all $transitionSpeed ease-in-out;
+}
+
+@mixin scaleOnCreation($scaleFactor)
+{
+	-ms-transform: scale($scaleFactor, $scaleFactor); /* IE 9 */
+	-webkit-transform: scale($scaleFactor, $scaleFactor); /* Safari */
+	transform: scale($scaleFactor, $scaleFactor);
+}
+
+html, body
+{
+	background-color: $purple;
+	width: 100vw;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	font-family: 'Droid Sans', sans-serif;
+	font-size: $fontSize;
+	color: $whitefont;
+	overflow-x: hidden;
+	-webkit-text-size-adjust: auto;
+}
+
+#header
+{
+	width: 70%;
+	height: auto;
+	margin: auto;
+	text-align: center;
+	letter-spacing: 0.1em;
+	padding-top: 1vh;
+}
+
+#content-container
+{
+	width: 70%;
+	height: auto;
+	min-height: 50%;
+	margin: auto;
+	padding: 1vw;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+/*create container and make it 3d*/
+.tile-container
+{
+	perspective: 1000px;
+	@include tile(75px, 75px, 1vw);
+	position: relative;
+	opacity: 1;
+	@include scaleOnCreation(0);
+	@include animationTransition(0.3s);
+}
+
+.tile-container.scaled
+{
+	@include scaleOnCreation(1);
+}
+
+.tile-container.removed
+{
+	@include fadeOut(0.3s, 0);
+}
+
+/*when tile-container gets flipped, rotate*/
+.tile-container.flipped .front
+{
+	transform: rotateY(180deg);
+}
+
+.tile-container.flipped .back
+{
+	transform: rotateY(0deg);
+}
+
+/* hide back of pane during swap */
+.front, .back
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	-webkit-backface-visibility: hidden;
+    backface-visibility: hidden; //this hides the other face
+  	@include animationTransition(0.3s);
+    text-align: center;
+	line-height: 75px; //line-height = height of tile-container, so that it centers the text in the middle
+	vertical-align: top;
+	font-size: 3em;
+	@include box-shadows(20px);
+}
+
+.front
+{
+	background-color: $green;
+
+}
+
+.front:hover
+{
+	background-color: $lightgreen;
+}
+
+.back
+{
+	-webkit-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+	background-color: $orange;
+}
+
+#inputContainer
+{
+	@extend #header;
+}
+
+#userInputField
+{
+	background-color: $lightgreen;
+	border-radius: 5px;
+    border: 2px solid $whitefont;
+    padding: 1vh;
+    @include box-shadows(17px);
+    @include animationTransition(0.2s);
+    color: $black;
+    font-weight: bold;
+    margin: 1vw;
+}
+
+#userInputField:focus
+{
+	background-color: $darkgreen;
+	color: $whitefont;
+}
+
+input[type="button"]
+{
+    background-color: $lightorange;
+	@extend #userInputField;
+}
+
+input[type="button"]:hover
+{
+	background-color: $darkorange;
+	color: $whitefont;
+}
+
+#footer
+{
+	@extend #header;
+	width: 100%;
+	font-size: $fontSize;
+}
+
+#footer a
+{
+	color: $whitefont;
+	text-decoration: none;
+	@include animationTransition(0.2s);
+}
+
+#footer a:hover
+{
+	color: $orange;
+}
+
+@media (min-width: 1024px)
+{
+	.tile-container
+	{
+		@include tile(125px, 125px, 1vw);
+	}
+
+	.front, .back
+	{
+		line-height: 125px;
+		font-size: 3.5em;
+	}
+
+	#userInputField
+	{
+		font-size: 1em;
+	}
+
+	input[type="button"]
+	{
+		font-size: 1em;
+	}
+}

@@ -39,16 +39,16 @@ the do while loop stops when array.length =! 0 . If you do > 0 , it stops immedi
 
 //I create an array to hold the bottom values
 //var bottomValue = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10];
-var bottomValue = [];
-var tileCount = 0;
+window["bottomValue"] = [];
 //array to hold the Tile objects
-var tileContainer = [];
+window["tileContainer"] = [];
 
-var contentContainer = document.getElementById("content-container");
+window["contentContainer"] = document.getElementById("content-container");
 
 function userInput()
 {
-	bottomValue.length = 0;
+	window["tileContainer"].length = 0;
+	window["bottomValue"].length = 0;
 	document.getElementById("content-container").innerHTML = "";
 
 	var userNumber = parseInt(document.getElementById("userInputField").value);
@@ -64,9 +64,9 @@ function userInput()
 	//create a loop which outputs 0,0,1,1,2,2 etc for the bottomValue array
 	for (var i = 0; i < userNumber; i++)
 	{
-		bottomValue.push(i);
-		bottomValue.push(i);
-		console.log(bottomValue);
+		window["bottomValue"].push(i);
+		window["bottomValue"].push(i);
+		console.log(window["bottomValue"]);
 
 		//if(user input weer getal){ bottomValue.length = 0;}
 	}
@@ -74,18 +74,16 @@ function userInput()
 	do
 	{
 		//I create a var to hold the index number of the array, which is chosen at random between 0 and array.length. Math.floor makes sure the number is never higher than the array.lenght by rounding down (1.9 ==> 1)
-		var index = Math.floor(Math.random() * bottomValue.length);
+		var index = Math.floor(Math.random() * window["bottomValue"].length);
 		//I create a var which holds the value of the chosen index of array
-		var bottomRandomValue = bottomValue[index];
+		var bottomRandomValue = window["bottomValue"][index];
 		//I remove the index of array and only remove 1
-		bottomValue.splice(index, 1);
-
-		tileCount++;
+		window["bottomValue"].splice(index, 1);
 
 		var divTileContainer = document.createElement("div");
 		divTileContainer.setAttribute("class", "tile-container");
 
-		contentContainer.appendChild(divTileContainer);
+		window["contentContainer"].appendChild(divTileContainer);
 
 		var innerTileContainerFront = document.createElement("div");
 		innerTileContainerFront.class = "front";
@@ -112,22 +110,23 @@ function userInput()
 		var NewTile = new Tile(bottomRandomValue, false, innerTileContainerBack, innerTileContainerFront, divTileContainer);
 
 		//push the newly created Tile to array tileContainer and keep doing this until bottomValue is empty.
-		tileContainer.push(NewTile);
+		window["tileContainer"].push(NewTile);
 
 	}
-	while(bottomValue.length > 0);
+	while(window["bottomValue"].length > 0);
+
   scaleIn();
 }
 
 
 //I create an object named "tile", which should be used in a loop that spawns the tiles. Constructor
-function Tile(hiddenNumber, isFaceUp, back, front, tileContainer)
+function Tile(hiddenNumber, isFaceUp, back, front, HTMLtileContainer)
 {
 	this.hiddenNumber = hiddenNumber;
 	this.isFaceUp = isFaceUp;
 	this.back = back;
 	this.front = front;
-	this.tileContainer = tileContainer;
+	this.HTMLtileContainer = HTMLtileContainer;
 }
 
 
@@ -170,15 +169,15 @@ document.addEventListener('click', function objectFinder(e)
     {
 
         //Iterate through the tileContainer array, increment by 1 each time
-       	for(var i = 0; i < tileContainer.length; i++)
+       	for(var i = 0; i < window["tileContainer"].length; i++)
        	{	//if the MouseEvent property target or srcElement === the tile object's back, then...
-       		if(target === tileContainer[i].front)
+       		if(target === window["tileContainer"][i].front)
        		{
 
        			showHiddenNumber(i);
 
        			//I check the tileContainer again with a different var
-       			for(var j = 0; j < tileContainer.length; j++ )
+       			for(var j = 0; j < window["tileContainer"].length; j++ )
        			{
        				/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
        				 When i and j = 0, the second if gets done (tileContainer i = j, because their index are both 0.)
@@ -186,15 +185,15 @@ document.addEventListener('click', function objectFinder(e)
        				 If this is the case, it checks both hiddenNumbers and compares. If true, delete the divs and remove them from the array
        				 Else set their innerHTML to empty and their bool to false
        				 */
-					if(tileContainer[i] != tileContainer[j] && tileContainer[j].isFaceUp === true)
+					if(window["tileContainer"][i] != window["tileContainer"][j] && window["tileContainer"][j].isFaceUp === true)
 					{
 
-						tileContainer[j].back.innerHTML = tileContainer[j].hiddenNumber.toString();
+						window["tileContainer"][j].back.innerHTML = window["tileContainer"][j].hiddenNumber.toString();
 
-						if(tileContainer[i].isFaceUp === true && tileContainer[j].isFaceUp === true)
+						if(window["tileContainer"][i].isFaceUp === true && window["tileContainer"][j].isFaceUp === true)
 						{
 
-							timeoutCode(tileContainer[i], tileContainer[j]);
+							timeoutCode(window["tileContainer"][i], window["tileContainer"][j]);
 
 						}
 
@@ -248,22 +247,22 @@ If they do match each other, then they both got to disappear.
 
 function showHiddenNumber(el)
 {
-	var clickedObject = tileContainer[el];
+	var clickedObject = window["tileContainer"][el];
 
 
 	//set bool to false again, and remove its html content. Which is the hiddenNumber.
-	if(tileContainer[el].isFaceUp == true)
+	if(window["tileContainer"][el].isFaceUp == true)
 	{
 		clickedObject.back.innerHTML = " ";
 	}
 	else
 	{
 		//append the hiddenNumber string to the found object's back, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
-		clickedObject.back.innerHTML = tileContainer[el].hiddenNumber.toString();
+		clickedObject.back.innerHTML = window["tileContainer"][el].hiddenNumber.toString();
 		clickedObject.isFaceUp = true;
 
-		clickedObject.tileContainer.classList.add("flipped");
-		clickedObject.tileContainer.classList.add("flipped");
+		clickedObject.HTMLtileContainer.classList.add("flipped");
+		clickedObject.HTMLtileContainer.classList.add("flipped");
 
 	}
 }
@@ -290,7 +289,7 @@ function checkNumberOfTilesClicked()
 	deze functie moet checken hoeveel tiles.isFaceUp = true zijn en returned dit.
 	*/
 	var faceUpCounter = 0;
-	tileContainer.forEach(function(tile)
+	window["tileContainer"].forEach(function(tile)
 	{
 		if(tile.isFaceUp == true)
 		{
@@ -306,8 +305,8 @@ function checkNumberOfTilesClicked()
 function removeTile(i, j)
 {
 	//add .removed class to tile-container
-	i.tileContainer.classList.add("removed");
-	j.tileContainer.classList.add("removed");
+	i.HTMLtileContainer.classList.add("removed");
+	j.HTMLtileContainer.classList.add("removed");
 
 	//set timeOut for code underneath, so that the animation first completes then gets removed
 	setTimeout(function ()
@@ -319,19 +318,22 @@ function removeTile(i, j)
 		j.front.remove(j.front);
 		j.back.remove(j.back);
 
-		tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
-		tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
+		window["tileContainer"] = window["tileContainer"].filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
+		window["tileContainer"] = window["tileContainer"].filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
+
+		youHaveWon();
+
 	}, 300);
 
 }
 
 function turnTileDown(i, j)
 {
-	i.tileContainer.classList.remove("flipped");
-	i.tileContainer.classList.remove("flipped");
+	i.HTMLtileContainer.classList.remove("flipped");
+	i.HTMLtileContainer.classList.remove("flipped");
 
-	j.tileContainer.classList.remove("flipped");
-	j.tileContainer.classList.remove("flipped");
+	j.HTMLtileContainer.classList.remove("flipped");
+	j.HTMLtileContainer.classList.remove("flipped");
 
 	i.back.innerHTML = " ";
 	j.back.innerHTML = " ";
@@ -342,17 +344,16 @@ function turnTileDown(i, j)
 //scale the created tiles from 0 to 1 with css classes
 function scaleIn()
 {
-   setTimeout(function ()
-   {
-      for (var i = 0; i < tileContainer.length; i++)
-      {
-        if (i < tileContainer.length)
-        {
-          tileContainer[i].tileContainer.classList.add("scaled");
-          //myLoop();
-        }
-    }
-   }, randomIntFromInterval(50, 300))
+	for (var i = 0; i < window["tileContainer"].length; i++)
+	{
+		(function (i)
+		{
+			setTimeout(function ()
+			{
+				window["tileContainer"][i].HTMLtileContainer.classList.add("scaled");
+			}, randomIntFromInterval(10, 50) * i );
+		})(i);
+	};
 }
 
 // What it does "extra" is it allows random intervals that do not start with 1.
@@ -363,4 +364,15 @@ function randomIntFromInterval(min,max)
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
+function youHaveWon()
+ {
+ 	if(window["tileContainer"].length == 0)
+ 	{
+ 		window["contentContainer"].innerHTML = "";
+ 		var youWonDiv = document.createElement("div");
+ 		youWonDiv.setAttribute("class", "youWonContainer");
+ 		youWonDiv.innerHTML = "You won!";
+ 		window["contentContainer"].appendChild(youWonDiv);
+ 	}
+ }
 userInput();
