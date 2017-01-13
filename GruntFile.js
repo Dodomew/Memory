@@ -60,8 +60,7 @@ module.exports = function(grunt)
 			{
 				options:
 				{
-					mangle: true,
-					wrap: true,
+					mangle: false,
 					preserveComments: false
 				},
 				target:
