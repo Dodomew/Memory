@@ -37,342 +37,224 @@ the do while loop stops when array.length =! 0 . If you do > 0 , it stops immedi
 
 */
 
-//I create an array to hold the bottom values
-//var bottomValue = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10];
-window["bottomValue"] = [];
-//array to hold the Tile objects
-window["tileContainer"] = [];
-
-window["contentContainer"] = document.getElementById("content-container");
-
-function userInput()
+(function()
 {
-	window["tileContainer"].length = 0;
-	window["bottomValue"].length = 0;
-	document.getElementById("content-container").innerHTML = "";
+	var bottomValue = [];
+	var tileContainer = [];
+	var contentContainer = document.getElementById("content-container");
 
-	var userNumber = parseInt(document.getElementById("userInputField").value);
-	/*
-	var userNumber = document.getElementById("userInputField");
-	numberOfPairs = parseInt(userNumber.value);
-	console.log(numberOfPairs);
-	return numberOfPairs;
-	*/
-	console.log(userNumber);
-	//return userNumber;
-
-	//create a loop which outputs 0,0,1,1,2,2 etc for the bottomValue array
-	for (var i = 0; i < userNumber; i++)
+	function userInput()
 	{
-		window["bottomValue"].push(i);
-		window["bottomValue"].push(i);
-		console.log(window["bottomValue"]);
+		tileContainer.length = 0;
+		bottomValue.length = 0;
+		contentContainer.innerHTML = "";
 
-		//if(user input weer getal){ bottomValue.length = 0;}
-	}
+		let userNumber = parseInt(document.getElementById("userInputField").value);
 
-	do
-	{
-		//I create a var to hold the index number of the array, which is chosen at random between 0 and array.length. Math.floor makes sure the number is never higher than the array.lenght by rounding down (1.9 ==> 1)
-		var index = Math.floor(Math.random() * window["bottomValue"].length);
-		//I create a var which holds the value of the chosen index of array
-		var bottomRandomValue = window["bottomValue"][index];
-		//I remove the index of array and only remove 1
-		window["bottomValue"].splice(index, 1);
-
-		var divTileContainer = document.createElement("div");
-		divTileContainer.setAttribute("class", "tile-container");
-
-		window["contentContainer"].appendChild(divTileContainer);
-
-		var innerTileContainerFront = document.createElement("div");
-		innerTileContainerFront.class = "front";
-		innerTileContainerFront.setAttribute("class", "front");
-
-	/*
-
-		var back = document.createElement("div");
-		back.class = "back";
-		back.setAttribute("class", "back");
-		divTileContainer.appendChild(back);
-	*/
-		//create a var that holds the hiddenNumber
-		//var back = document.createElement("div");
-
-		var innerTileContainerBack = document.createElement("div");
-		innerTileContainerBack.class = "back";
-		innerTileContainerBack.setAttribute("class", "back");
-
-		divTileContainer.appendChild(innerTileContainerFront);
-		divTileContainer.appendChild(innerTileContainerBack);
-
-		//instantiate Tile (line 44) and give the following parameters
-		var NewTile = new Tile(bottomRandomValue, false, innerTileContainerBack, innerTileContainerFront, divTileContainer);
-
-		//push the newly created Tile to array tileContainer and keep doing this until bottomValue is empty.
-		window["tileContainer"].push(NewTile);
-
-	}
-	while(window["bottomValue"].length > 0);
-
-  scaleIn();
-}
-
-
-//I create an object named "tile", which should be used in a loop that spawns the tiles. Constructor
-function Tile(hiddenNumber, isFaceUp, back, front, HTMLtileContainer)
-{
-	this.hiddenNumber = hiddenNumber;
-	this.isFaceUp = isFaceUp;
-	this.back = back;
-	this.front = front;
-	this.HTMLtileContainer = HTMLtileContainer;
-}
-
-
-//document.getElementByClassName("tile");
-/*
-	if element is clicked, return the classname to me (back), which is a property of that object
-	that back has a bottomRandomValue which I want to show
-	to know which class the element has, i have to look at the Tile object, since it stores the back
-	but the Tile objects arent stored anywhere, so i gotta create an Array that holds the Tiles
-	then, when clicked I can check the returned value with the objects in the array to see which object was clicked
-
-	something like: tileContainer[clickedObject].hiddenNumber
-	I want to show this number in this tile square, so perhaps something like innerHTML = hiddenNumber.toString(); , but only to the tileNumber class, not tile class (tile1, tile2 etc)
-	e.srcElement = back (in the web console it shows for example: div.tile1.tile, which is also the first object's back (in this case))
-	so when a tile is clicked, I know the value of its back.
-	I can then iterate through the array that holds the object and check each object's back. If any of those object's back matches the clicked back, I know which Object was clicked. For loop
-
-	When I know which object is clicked, I want to show bottomRandomValue as a string inside the tile1 div
-
-	for(var i; i < array.length; i++)
-	{
-		if(e.srcElement === tileContainer[i].back)
+		for (let i = 0; i < userNumber; i++)
 		{
-			this is my ClickedObject
+			// push twice, because 2 tiles have the same value
+			bottomValue.push(i);
+			bottomValue.push(i);
 		}
-		else
-		no;
-	}
-*/
 
-//I call the addEventListener function, give it parameters. Inside this function, I call another function named ''objectFinder'' with parameter e. Inside this function a lot will happen
-//e is then defined as window.event. When you check web console you get MouseEvent, which is e. This e has a lot of properties, including src.Element.
-document.addEventListener('click', function objectFinder(e)
-{
-    e = window.event || e;
-    var target = e.target || e.srcElement;
-		console.log(e.target); //the target can be either the e.target or e.srcElements, both properties work
-
-    if (checkNumberOfTilesClicked() <= 1)
-    {
-
-        //Iterate through the tileContainer array, increment by 1 each time
-       	for(var i = 0; i < window["tileContainer"].length; i++)
-       	{	//if the MouseEvent property target or srcElement === the tile object's back, then...
-       		if(target === window["tileContainer"][i].front)
-       		{
-
-       			showHiddenNumber(i);
-
-       			//I check the tileContainer again with a different var
-       			for(var j = 0; j < window["tileContainer"].length; j++ )
-       			{
-       				/*because it runs through the same tileContainer, it is important to distinguish the 2 objects from each other (because they come from the same object).
-       				 When i and j = 0, the second if gets done (tileContainer i = j, because their index are both 0.)
-       				 If they are not the same, so i = 0, j = 1 , then it looks at the .isFaceUp. Since i isFaceUp is true when it gets to the inner for loop, all it has to have is tileContainer[j] = true.
-       				 If this is the case, it checks both hiddenNumbers and compares. If true, delete the divs and remove them from the array
-       				 Else set their innerHTML to empty and their bool to false
-       				 */
-					if(window["tileContainer"][i] != window["tileContainer"][j] && window["tileContainer"][j].isFaceUp === true)
-					{
-
-						window["tileContainer"][j].back.innerHTML = window["tileContainer"][j].hiddenNumber.toString();
-
-						if(window["tileContainer"][i].isFaceUp === true && window["tileContainer"][j].isFaceUp === true)
-						{
-
-							timeoutCode(window["tileContainer"][i], window["tileContainer"][j]);
-
-						}
-
-					}
-
-       			}
-
-       			break; //stops the for loop. When an object is clicked again, the function is called again, therefor calling the for loop again
-       		}
-
-       	}
-	}
-},
-false);
-
-/*
-	I have to create an if(?) that says: if object is clicked, and this object is already showing its hiddenNumber, hide hiddenNumber
-	I append something, so I should be able to remove it too, something like: clickedObject.back.remove(divContent)
-
-	Now I have to make it so that IF there are two tiles showing their hiddenNumber, and their hiddenNumbers are NOT EQUAL, then hide both tiles again.
-	If they are the same hiddenNumber, then remove them from the game.
-	ClickedObjects are stored in the tileContainer[i]; . So is there a way to say: if 2 objects from the array their bool is true, then check their values?
-
-	if(tileContainer[i].isFaceUp === true)
-	{
-		console.log(tileContainer[i]);
-	}
-
-	for(var x = 0; x = 2; )
-*/
-
-/*
-
-When one object is already showing its hiddenNumber, and a second object is clicked, it must also show its hiddenNumber. BUT if they dont match each other, both tiles gotta go facedown again.
-If they do match each other, then they both got to disappear.
-
-	if(tileContainer[j].isFaceUp == true)
-	{
-		clickedObject.back.innerHTML = " ";
-		clickedObject.isFaceUp = false;
-	}
-	else
-	{
-		//append the hiddenNumber string to the found object's back, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
-		clickedObject.back.innerHTML = tileContainer[j].hiddenNumber.toString();
-		clickedObject.isFaceUp = true;
-	}
-
-	but this is copy paste of the first object, is there anything to make this less?
-*/
-
-function showHiddenNumber(el)
-{
-	var clickedObject = window["tileContainer"][el];
-
-
-	//set bool to false again, and remove its html content. Which is the hiddenNumber.
-	if(window["tileContainer"][el].isFaceUp == true)
-	{
-		clickedObject.back.innerHTML = " ";
-	}
-	else
-	{
-		//append the hiddenNumber string to the found object's back, so that it appears as : div class = "tile1 tile">hiddenNumber's value</div>
-		clickedObject.back.innerHTML = window["tileContainer"][el].hiddenNumber.toString();
-		clickedObject.isFaceUp = true;
-
-		clickedObject.HTMLtileContainer.classList.add("flipped");
-		clickedObject.HTMLtileContainer.classList.add("flipped");
-
-	}
-}
-
-function timeoutCode(i, j)
-{
-	setTimeout(function ()
-	{
-
-		if(i.hiddenNumber === j.hiddenNumber)
+		do
 		{
-			removeTile(i, j);
+			let index = Math.floor(Math.random() * bottomValue.length);
+			let bottomRandomValue = bottomValue[index];
+
+			bottomValue.splice(index, 1);
+
+			var divTile = document.createElement("div");
+			divTile.setAttribute("class", "tile-container");
+			contentContainer.appendChild(divTile);
+
+			var innerTileContainerFront = document.createElement("div");
+			innerTileContainerFront.class = "front";
+			innerTileContainerFront.setAttribute("class", "front");
+
+			var innerTileContainerBack = document.createElement("div");
+			innerTileContainerBack.class = "back";
+			innerTileContainerBack.setAttribute("class", "back");
+
+			divTile.appendChild(innerTileContainerFront);
+			divTile.appendChild(innerTileContainerBack);
+
+			var NewTile = new Tile(bottomRandomValue, false, innerTileContainerBack, innerTileContainerFront, divTile);
+
+			tileContainer.push(NewTile);
+
+		}
+		while(bottomValue.length > 0);
+
+	  scaleIn();
+	}
+
+
+	//I create an object named "tile", which should be used in a loop that spawns the tiles. Constructor
+	function Tile(hiddenNumber, isFaceUp, back, front, HTMLtileContainer)
+	{
+		this.hiddenNumber = hiddenNumber;
+		this.isFaceUp = isFaceUp;
+		this.back = back;
+		this.front = front;
+		this.HTMLtileContainer = HTMLtileContainer;
+	}
+
+	document.addEventListener('click', function objectFinder(e)
+	{
+	    e = window.event || e;
+	    var target = e.target || e.srcElement;
+			console.log(e.target); //the target can be either the e.target or e.srcElements, both properties work
+
+	    if (checkNumberOfTilesClicked() <= 1)
+	    {
+	       	for(var i = 0; i <tileContainer.length; i++)
+	       	{
+	       		if(target === tileContainer[i].front)
+	       		{
+	       			showHiddenNumber(i);
+
+	       			for(var j = 0; j < tileContainer.length; j++ )
+	       			{
+								if(tileContainer[i] != tileContainer[j] && tileContainer[j].isFaceUp === true)
+								{
+									tileContainer[j].back.innerHTML = tileContainer[j].hiddenNumber.toString();
+
+									if(tileContainer[i].isFaceUp === true && tileContainer[j].isFaceUp === true)
+									{
+										timeoutCode(tileContainer[i], tileContainer[j]);
+									}
+								}
+	       			}
+	       			break;
+	       		}
+	       	}
+		}
+	},
+	false);
+
+	function showHiddenNumber(el)
+	{
+		var clickedObject = tileContainer[el];
+
+		if(tileContainer[el].isFaceUp == true)
+		{
+			clickedObject.back.innerHTML = " ";
 		}
 		else
 		{
-			turnTileDown(i, j);
+			clickedObject.back.innerHTML = tileContainer[el].hiddenNumber.toString();
+			clickedObject.isFaceUp = true;
+
+			clickedObject.HTMLtileContainer.classList.add("flipped");
+			clickedObject.HTMLtileContainer.classList.add("flipped");
+
 		}
-	}, 1000);
-}
+	}
 
-function checkNumberOfTilesClicked()
-{
-	/*
-	deze functie moet checken hoeveel tiles.isFaceUp = true zijn en returned dit.
-	*/
-	var faceUpCounter = 0;
-	window["tileContainer"].forEach(function(tile)
+	function timeoutCode(i, j)
 	{
-		if(tile.isFaceUp == true)
+		setTimeout(function ()
 		{
-			faceUpCounter++;
-		}
 
-	});
-
-	return faceUpCounter;
-
-}
-
-function removeTile(i, j)
-{
-	//add .removed class to tile-container
-	i.HTMLtileContainer.classList.add("removed");
-	j.HTMLtileContainer.classList.add("removed");
-
-	//set timeOut for code underneath, so that the animation first completes then gets removed
-	setTimeout(function ()
-	{
-		//remove the div front and back from the html document
-		i.front.remove(i.front);
-		i.back.remove(i.back);
-
-		j.front.remove(j.front);
-		j.back.remove(j.back);
-
-		window["tileContainer"] = window["tileContainer"].filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
-		window["tileContainer"] = window["tileContainer"].filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
-
-		youHaveWon();
-
-	}, 300);
-
-}
-
-function turnTileDown(i, j)
-{
-	i.HTMLtileContainer.classList.remove("flipped");
-	i.HTMLtileContainer.classList.remove("flipped");
-
-	j.HTMLtileContainer.classList.remove("flipped");
-	j.HTMLtileContainer.classList.remove("flipped");
-
-	i.back.innerHTML = " ";
-	j.back.innerHTML = " ";
-	i.isFaceUp = false;
-	j.isFaceUp = false;
-}
-
-//scale the created tiles from 0 to 1 with css classes
-function scaleIn()
-{
-	for (var i = 0; i < window["tileContainer"].length; i++)
-	{
-		(function (i)
-		{
-			setTimeout(function ()
+			if(i.hiddenNumber === j.hiddenNumber)
 			{
-				window["tileContainer"][i].HTMLtileContainer.classList.add("scaled");
-			}, randomIntFromInterval(10, 50) * i );
-		})(i);
-	};
-}
+				removeTile(i, j);
+			}
+			else
+			{
+				turnTileDown(i, j);
+			}
+		}, 1000);
+	}
 
-// What it does "extra" is it allows random intervals that do not start with 1.
-// So you can get a random number from 10 to 15 for example.
-// http://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
-function randomIntFromInterval(min,max)
-{
-    return Math.floor(Math.random()*(max-min+1)+min);
-}
+	function checkNumberOfTilesClicked()
+	{
+		var faceUpCounter = 0;
+		tileContainer.forEach(function(tile)
+		{
+			if(tile.isFaceUp == true)
+			{
+				faceUpCounter++;
+			}
 
-function youHaveWon()
- {
- 	if(window["tileContainer"].length == 0)
- 	{
- 		window["contentContainer"].innerHTML = "";
- 		var youWonDiv = document.createElement("div");
- 		youWonDiv.setAttribute("class", "youWonContainer");
- 		youWonDiv.innerHTML = "You won!";
- 		window["contentContainer"].appendChild(youWonDiv);
- 	}
- }
-userInput();
+		});
+
+		return faceUpCounter;
+
+	}
+
+	function removeTile(i, j)
+	{
+		i.HTMLtileContainer.classList.add("removed");
+		j.HTMLtileContainer.classList.add("removed");
+
+		//set timeOut for code underneath, so that the animation first completes then gets removed
+		setTimeout(function ()
+		{
+			i.front.remove(i.front);
+			i.back.remove(i.back);
+
+			j.front.remove(j.front);
+			j.back.remove(j.back);
+
+			tileContainer = tileContainer.filter(function(tile) { return tile !== i; }); //return tilecontainer zonder object i erin (grootte is dan 8 - 1 - 7)
+			tileContainer = tileContainer.filter(function(tile) { return tile !== j; }); //return tilecontainer opnieuw zonder object j erin (grootte is dan 7 - 1 = 6)
+
+			youHaveWon();
+
+		}, 300);
+
+	}
+
+	function turnTileDown(i, j)
+	{
+		i.HTMLtileContainer.classList.remove("flipped");
+		i.HTMLtileContainer.classList.remove("flipped");
+
+		j.HTMLtileContainer.classList.remove("flipped");
+		j.HTMLtileContainer.classList.remove("flipped");
+
+		i.back.innerHTML = " ";
+		j.back.innerHTML = " ";
+		i.isFaceUp = false;
+		j.isFaceUp = false;
+	}
+
+	function scaleIn()
+	{
+		for (var i = 0; i < tileContainer.length; i++)
+		{
+			(function (i)
+			{
+				setTimeout(function ()
+				{
+					tileContainer[i].HTMLtileContainer.classList.add("scaled");
+				}, randomIntFromInterval(10, 50) * i );
+			})(i);
+		};
+	}
+
+	// What it does "extra" is it allows random intervals that do not start with 1.
+	// So you can get a random number from 10 to 15 for example.
+	// http://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+	function randomIntFromInterval(min,max)
+	{
+	    return Math.floor(Math.random()*(max-min+1)+min);
+	}
+
+	function youHaveWon()
+	{
+		if(tileContainer.length == 0)
+		{
+			tileContainer.innerHTML = "";
+			var youWonDiv = document.createElement("div");
+			youWonDiv.setAttribute("class", "youWonContainer");
+			youWonDiv.innerHTML = "You won!";
+			tileContainer.appendChild(youWonDiv);
+		}
+	}
+	userInput();
+}
+());
