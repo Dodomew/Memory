@@ -2,11 +2,14 @@
 {
   var tileNumberContainer = [];
   var tileObjectsContainer = [];
-  var contentContainer = document.getElementById("content-container");
   var clickedTilesContainer = [];
 
-  let userInputButton = document.getElementById("userInputButton");
+  var contentContainer = document.getElementById("content-container");
+  var numberOfTilesClicked = document.getElementById("numberOfTilesClicked");
+  var userInputButton = document.getElementById("userInputButton");
   userInputButton.addEventListener('click', setAmountOfTiles, false);
+
+  var countClicksOnTiles = 0;
 
   var TileState =
   {
@@ -44,6 +47,7 @@
   {
     tileNumberContainer = [];
     tileObjectsContainer = [];
+    contentContainer.innerHTML = "";
     let userNumber = parseInt(document.getElementById("userInputField").value);
 
 		for (let i = 0; i < userNumber; i++)
@@ -66,8 +70,8 @@
       let bottomRandomValue = tileNumberContainer[index];
 
       let newTile = new Tile(bottomRandomValue, loopCount);
-      tileObjectsContainer.push(newTile);
 
+      tileObjectsContainer.push(newTile);
       tileNumberContainer.splice(index, 1);
 
       loopCount++;
@@ -96,10 +100,11 @@
         if(clickedTileId === tileObjectsContainer[i].divTile.id && tileObjectsContainer[i].tileState == TileState.FACE_DOWN)
         {
           turnTileFaceUp(tileObjectsContainer[i]);
+          amountOfTimesClickedOnTile();
 
           if(clickedTilesContainer.length == 2)
           {
-            compareTwoTiles(clickedTilesContainer);
+            compareTwoTiles();
           }
         }
       }
@@ -110,20 +115,29 @@
   {
     clickedTile.divTile.classList.add("flipped");
     clickedTile.innerTileContainerBack.innerHTML = clickedTile.hiddenNumber;
-    clickedTile.tileState == TileState.FACE_UP;
+    clickedTile.tileState = TileState.FACE_UP;
     clickedTilesContainer.push(clickedTile);
   }
 
-  function compareTwoTiles(arrayOfClickedTiles)
+  function turnTileFaceDown(clickedTile)
   {
-    let tileToCompareTo = arrayOfClickedTiles[0];
-    let tileToBeCompared = arrayOfClickedTiles[1];
+    clickedTile.divTile.classList.remove("flipped");
+    clickedTile.innerTileContainerBack.innerHTML = "";
+    clickedTile.tileState = TileState.FACE_DOWN;
+    clickedTilesContainer.splice(clickedTile);
+  }
+
+  function compareTwoTiles()
+  {
+    let tileToCompareTo = clickedTilesContainer[0];
+    let tileToBeCompared = clickedTilesContainer[1];
 
     if(tileToCompareTo.hiddenNumber == tileToBeCompared.hiddenNumber)
     {
       setTimeout(function ()
       {
-        console.log("yay");
+        removeTilesFromContainer(tileToCompareTo);
+        removeTilesFromContainer(tileToBeCompared);
       },
       1000);
     }
@@ -133,23 +147,36 @@
       {
         turnTileFaceDown(tileToCompareTo);
         turnTileFaceDown(tileToBeCompared);
-        clickedTilesContainer = [];
       },
       1000);
     }
+    clickedTilesContainer = [];
   }
 
-  function turnTileFaceDown(clickedTile)
+  function removeTilesFromContainer(tileToBeRemoved)
   {
-    clickedTile.divTile.classList.remove("flipped");
-    clickedTile.innerTileContainerBack.innerHTML = "";
-    clickedTile.tileState == TileState.FACE_DOWN;
-    clickedTilesContainer.splice(clickedTile);
+    removeTileFromGame(tileToBeRemoved);
+
+    tileObjectsContainer = tileObjectsContainer.filter(function(tiles)
+    {
+      return tiles !== tileToBeRemoved;
+    });
   }
 
-  function removeTileFromGame()
+  function removeTileFromGame(tileToBeRemoved)
   {
+    let tileBack = tileToBeRemoved.innerTileContainerBack;
+    let tileFront = tileToBeRemoved.innerTileContainerFront;
 
+    tileToBeRemoved.divTile.classList.add("removed");
+
+    setTimeout(function ()
+    {
+      tileFront.parentNode.removeChild(tileFront);
+      tileBack.parentNode.removeChild(tileBack);
+      userHasWon();
+    }
+    ,500);
   }
 
   function noMoreThanTwoTilesFaceUp()
@@ -163,7 +190,6 @@
         faceUpCounter++;
       }
     }
-
     return faceUpCounter;
   }
 
@@ -175,10 +201,29 @@
       {
         setTimeout(function ()
         {
-          tileObjectsContainer[i].divTile.className += " scaled";
+          tileObjectsContainer[i].divTile.classList.add("scaled");
         }, randomIntFromInterval(10, 50) * i );
       })(i);
     };
+  }
+
+  function amountOfTimesClickedOnTile()
+  {
+    countClicksOnTiles++;
+    numberOfTilesClicked.innerHTML = countClicksOnTiles;
+  }
+
+  function userHasWon()
+  {
+    if(tileObjectsContainer.length == 0)
+    {
+      let youWonDiv = document.createElement("div");
+      youWonDiv.setAttribute("class", "youWonContainer");
+      youWonDiv.innerHTML = "You won!";
+
+      contentContainer.innerHTML = "";
+      contentContainer.appendChild(youWonDiv);
+    }
   }
 
   // What it does "extra" is it allows random intervals that do not start with 1.
