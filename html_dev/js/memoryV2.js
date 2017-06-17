@@ -7,7 +7,7 @@
   var contentContainer = document.getElementById("content-container");
   var numberOfTilesClicked = document.getElementById("numberOfTilesClicked");
   var userInputButton = document.getElementById("userInputButton");
-  userInputButton.addEventListener('click', setAmountOfTiles, false);
+  userInputButton.addEventListener('click', initializeGame, false);
 
   var countClicksOnTiles = 0;
 
@@ -39,11 +39,33 @@
       this.divTile.appendChild(this.innerTileContainerFront);
       this.divTile.appendChild(this.innerTileContainerBack);
 
-      this.divTile.addEventListener('click', didUserClickTile, false);
+      this.divTile.addEventListener('click', userHandleClickEvent, false);
     }
+
+    turnTileFaceUp()
+    {
+      this.divTile.classList.add("flipped");
+      this.innerTileContainerBack.innerHTML = this.hiddenNumber;
+      this.tileState = TileState.FACE_UP;
+      clickedTilesContainer.push(this);
+    }
+
+    turnTileFaceDown()
+    {
+      this.divTile.classList.remove("flipped");
+      this.innerTileContainerBack.innerHTML = "";
+      this.tileState = TileState.FACE_DOWN;
+      clickedTilesContainer.splice(this);
+    }
+
+    scaleInTile()
+    {
+      this.divTile.classList.add("scaled");
+    }
+
   }
 
-  function setAmountOfTiles()
+  function initializeGame()
   {
     tileNumberContainer = [];
     tileObjectsContainer = [];
@@ -56,11 +78,11 @@
 			tileNumberContainer.push(i);
 			tileNumberContainer.push(i);
 		}
-    assignNumberToTile();
-    scaleIn();
+    assignNumberToTiles();
+    scaleInSpawnedTiles();
   }
 
-  function assignNumberToTile()
+  function assignNumberToTiles()
   {
     let loopCount = 0;
 
@@ -79,7 +101,7 @@
     while (tileNumberContainer.length > 0);
   }
 
-  function didUserClickTile(event)
+  function userHandleClickEvent(event)
   {
     let e = event.currentTarget;
     let targetId = e.id || e.srcElement.id;
@@ -87,47 +109,31 @@
 
     if(targetClass.indexOf("tile-container") >= 0)
     {
-      whichTileIsClicked(targetId);
+      gameLogic(targetId);
     }
   }
 
-  function whichTileIsClicked(clickedTileId)
+  function gameLogic(clickedTileId)
   {
-    if(noMoreThanTwoTilesFaceUp() <= 1)
+    if(clickedTilesContainer.length <= 1)
     {
       for (let i = 0; i < tileObjectsContainer.length; i++)
       {
         if(clickedTileId === tileObjectsContainer[i].divTile.id && tileObjectsContainer[i].tileState == TileState.FACE_DOWN)
         {
-          turnTileFaceUp(tileObjectsContainer[i]);
+          tileObjectsContainer[i].turnTileFaceUp();
           amountOfTimesClickedOnTile();
 
           if(clickedTilesContainer.length == 2)
           {
-            compareTwoTiles();
+            compareTwoTilesAndDoAnimation();
           }
         }
       }
     }
   }
 
-  function turnTileFaceUp(clickedTile)
-  {
-    clickedTile.divTile.classList.add("flipped");
-    clickedTile.innerTileContainerBack.innerHTML = clickedTile.hiddenNumber;
-    clickedTile.tileState = TileState.FACE_UP;
-    clickedTilesContainer.push(clickedTile);
-  }
-
-  function turnTileFaceDown(clickedTile)
-  {
-    clickedTile.divTile.classList.remove("flipped");
-    clickedTile.innerTileContainerBack.innerHTML = "";
-    clickedTile.tileState = TileState.FACE_DOWN;
-    clickedTilesContainer.splice(clickedTile);
-  }
-
-  function compareTwoTiles()
+  function compareTwoTilesAndDoAnimation()
   {
     let tileToCompareTo = clickedTilesContainer[0];
     let tileToBeCompared = clickedTilesContainer[1];
@@ -145,12 +151,12 @@
     {
       setTimeout(function ()
       {
-        turnTileFaceDown(tileToCompareTo);
-        turnTileFaceDown(tileToBeCompared);
+        tileToCompareTo.turnTileFaceDown();
+        tileToBeCompared.turnTileFaceDown();
       },
       1000);
     }
-    clickedTilesContainer = [];
+
   }
 
   function removeTilesFromContainer(tileToBeRemoved)
@@ -174,26 +180,17 @@
     {
       tileFront.parentNode.removeChild(tileFront);
       tileBack.parentNode.removeChild(tileBack);
-      userHasWon();
+
+      if(tileObjectsContainer.length == 0)
+      {
+        userHasWon();
+      }
+
     }
     ,500);
   }
 
-  function noMoreThanTwoTilesFaceUp()
-  {
-    let faceUpCounter = 0;
-
-    for (let i = 0; i < tileObjectsContainer.length; i++)
-    {
-      if(tileObjectsContainer[i].tileState == TileState.FACE_UP)
-      {
-        faceUpCounter++;
-      }
-    }
-    return faceUpCounter;
-  }
-
-  function scaleIn()
+  function scaleInSpawnedTiles()
   {
     for (let i = 0; i < tileObjectsContainer.length; i++)
     {
@@ -201,7 +198,7 @@
       {
         setTimeout(function ()
         {
-          tileObjectsContainer[i].divTile.classList.add("scaled");
+          tileObjectsContainer[i].scaleInTile();
         }, randomIntFromInterval(10, 50) * i );
       })(i);
     };
@@ -215,15 +212,12 @@
 
   function userHasWon()
   {
-    if(tileObjectsContainer.length == 0)
-    {
-      let youWonDiv = document.createElement("div");
-      youWonDiv.setAttribute("class", "youWonContainer");
-      youWonDiv.innerHTML = "You won!";
+    let youWonDiv = document.createElement("div");
+    youWonDiv.setAttribute("class", "youWonContainer");
+    youWonDiv.innerHTML = "You won!";
 
-      contentContainer.innerHTML = "";
-      contentContainer.appendChild(youWonDiv);
-    }
+    contentContainer.innerHTML = "";
+    contentContainer.appendChild(youWonDiv);
   }
 
   // What it does "extra" is it allows random intervals that do not start with 1.
