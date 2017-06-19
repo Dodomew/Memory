@@ -188,6 +188,7 @@
 
     }
     ,500);
+    clickedTilesContainer = [];
   }
 
   function scaleInSpawnedTiles()
